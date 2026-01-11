@@ -6,7 +6,8 @@
       "Bash(npm run dev:*)",
       "Bash(timeout 3 tail:*)",
       "Bash(exit 0)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

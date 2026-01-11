@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES } from '../constants/componentTemplates'
-import { Component } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -7,12 +7,48 @@ interface ComponentListProps {
 
 export function ComponentList({ onAddComponent }: ComponentListProps) {
   const handleClick = (template: typeof COMPONENT_TEMPLATES[0]) => {
-    const newComponent: Component = {
-      id: `${template.type}-${Date.now()}`,
-      type: template.type,
-      content: template.defaultContent,
-      styles: { ...template.defaultStyles },
+    let newComponent: Component
+
+    switch (template.type) {
+      case 'hero':
+        newComponent = {
+          id: `hero-${Date.now()}`,
+          type: 'hero',
+          data: { ...DEFAULT_HERO },
+        } as HeroComponent
+        break
+      case 'slider':
+        newComponent = {
+          id: `slider-${Date.now()}`,
+          type: 'slider',
+          data: { ...DEFAULT_SLIDER },
+        } as SliderComponent
+        break
+      case 'video':
+        newComponent = {
+          id: `video-${Date.now()}`,
+          type: 'video',
+          data: { ...DEFAULT_VIDEO },
+        } as VideoComponent
+        break
+      case 'divider':
+        newComponent = {
+          id: `divider-${Date.now()}`,
+          type: 'divider',
+          data: { ...DEFAULT_DIVIDER },
+        } as DividerComponent
+        break
+      case 'grid':
+        newComponent = {
+          id: `grid-${Date.now()}`,
+          type: 'grid',
+          data: { ...DEFAULT_GRID, items: DEFAULT_GRID.items.map(item => ({ ...item })) },
+        } as GridComponent
+        break
+      default:
+        return
     }
+
     onAddComponent(newComponent)
   }
 
