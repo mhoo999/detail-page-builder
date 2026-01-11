@@ -36,7 +36,12 @@ function savePagesToStorage(pages: SavedPage[]): void {
   }
 }
 
-export function Builder() {
+interface BuilderProps {
+  initialPage?: SavedPage | null
+  onBack?: () => void
+}
+
+export function Builder({ initialPage, onBack }: BuilderProps) {
   const {
     components,
     selectedComponentId,
@@ -169,7 +174,13 @@ export function Builder() {
 
   useEffect(() => {
     loadPages()
-  }, [])
+    if (initialPage) {
+      setComponents(initialPage.content.components)
+      setPageTitle(initialPage.title)
+      setCurrentPageId(initialPage.id)
+      selectComponent(null)
+    }
+  }, [initialPage, setComponents, selectComponent])
 
   return (
     <div className="h-screen flex flex-col bg-white">
@@ -177,6 +188,14 @@ export function Builder() {
       <header className="bg-white border-b border-black px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="px-4 py-2 bg-black text-white rounded-none hover:bg-gray-800 border border-black"
+              >
+                ← 뒤로
+              </button>
+            )}
             <h1 className="text-2xl font-bold text-black">상세페이지 빌더</h1>
             <input
               type="text"
@@ -198,7 +217,7 @@ export function Builder() {
             </button>
             <button
               onClick={() => setShowPageList(!showPageList)}
-              className="px-4 py-2 bg-white text-black rounded-none hover:bg-gray-100 border border-black"
+              className="px-4 py-2 bg-black text-white rounded-none hover:bg-gray-800 border border-black"
             >
               페이지 관리
             </button>
@@ -211,7 +230,7 @@ export function Builder() {
             </button>
             <button
               onClick={handleExportHTML}
-              className="px-4 py-2 bg-white text-black rounded-none hover:bg-gray-100 border border-black"
+              className="px-4 py-2 bg-black text-white rounded-none hover:bg-gray-800 border border-black"
             >
               HTML 내보내기
             </button>
