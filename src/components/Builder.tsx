@@ -60,9 +60,11 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
   const [isLoadingPages, setIsLoadingPages] = useState(false)
   const [showPageList, setShowPageList] = useState(false)
   const [currentPageId, setCurrentPageId] = useState<string | null>(null)
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
   
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const isInitialMountRef = useRef(true)
+  const savedMessageTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleExportHTML = () => {
     const html = generateHTML(components, pageTitle)
@@ -114,6 +116,17 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
           alert('페이지가 저장되었습니다!')
         }
       }
+
+      // 저장 시간 업데이트
+      setLastSavedAt(new Date())
+      
+      // 3초 후 저장 메시지 숨기기
+      if (savedMessageTimeoutRef.current) {
+        clearTimeout(savedMessageTimeoutRef.current)
+      }
+      savedMessageTimeoutRef.current = setTimeout(() => {
+        setLastSavedAt(null)
+      }, 3000)
 
       // 페이지 목록 새로고침
       if (!silent) {
@@ -253,8 +266,8 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
               className="px-3 py-1 border border-black rounded-none focus:outline-none focus:ring-0"
               placeholder="페이지 제목"
             />
-            {currentPageId && (
-              <span className="text-sm text-gray-500">(편집 중)</span>
+            {lastSavedAt && (
+              <span className="text-sm text-gray-500">저장됨</span>
             )}
           </div>
           <div className="flex gap-3">
