@@ -373,17 +373,36 @@ function generateSliderHTML(comp: Extract<Component, { type: 'slider' }>): strin
 
 function generateVideoHTML(comp: Extract<Component, { type: 'video' }>): string {
   const { data } = comp
+
+  // URL이 없는 경우 빈 placeholder 반환
+  if (!data.videoUrl) {
+    return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  <div style="max-width: 1140px; margin: 0 auto; height: ${data.height}; display: flex; align-items: center; justify-content: center; border: 2px dashed #d1d5db; border-radius: 8px; color: #9ca3af;">
+    비디오 URL을 입력하세요
+  </div>
+</div>`
+  }
+
   const videoId = data.videoType === 'youtube'
     ? data.videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1]
     : null
 
-  if (data.videoType === 'youtube' && videoId) {
-    return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  if (data.videoType === 'youtube') {
+    if (videoId) {
+      return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
   <div style="max-width: 1140px; margin: 0 auto; height: ${data.height};">
-    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}?autoplay=${data.autoPlay ? 1 : 0}&mute=${data.muted ? 1 : 0}&loop=${data.loop ? 1 : 0}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
 </div>`
+    } else {
+      return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  <div style="max-width: 1140px; margin: 0 auto; height: ${data.height}; display: flex; align-items: center; justify-content: center; border: 2px dashed #d1d5db; border-radius: 8px; color: #9ca3af;">
+    유효하지 않은 YouTube URL입니다
+  </div>
+</div>`
+    }
   }
+
   return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
   <div style="max-width: 1140px; margin: 0 auto; height: ${data.height};">
     <video width="100%" height="100%" controls ${data.autoPlay ? 'autoplay' : ''} ${data.muted ? 'muted' : ''} ${data.loop ? 'loop' : ''} style="object-fit: cover;">

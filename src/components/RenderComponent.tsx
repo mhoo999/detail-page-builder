@@ -280,12 +280,14 @@ function VideoRenderer({ component }: { component: Extract<Component, { type: 'v
   const { data } = component
 
   const getYouTubeEmbedUrl = (url: string) => {
+    if (!url) return ''
     const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1]
     return videoId ? `https://www.youtube.com/embed/${videoId}` : ''
   }
 
-  const videoUrl = data.videoType === 'youtube'
-    ? `${getYouTubeEmbedUrl(data.videoUrl)}?autoplay=${data.autoPlay ? 1 : 0}&mute=${data.muted ? 1 : 0}&loop=${data.loop ? 1 : 0}`
+  const youtubeEmbedUrl = data.videoType === 'youtube' ? getYouTubeEmbedUrl(data.videoUrl) : ''
+  const videoUrl = data.videoType === 'youtube' && youtubeEmbedUrl
+    ? `${youtubeEmbedUrl}?autoplay=${data.autoPlay ? 1 : 0}&mute=${data.muted ? 1 : 0}&loop=${data.loop ? 1 : 0}`
     : data.videoUrl
 
   return (
@@ -298,15 +300,47 @@ function VideoRenderer({ component }: { component: Extract<Component, { type: 'v
       className="cursor-pointer"
     >
       <div style={{ maxWidth: '1140px', margin: '0 auto', height: data.height }}>
-        {data.videoType === 'youtube' ? (
-          <iframe
-            width="100%"
-            height="100%"
-            src={videoUrl}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+        {!data.videoUrl ? (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '2px dashed #d1d5db',
+              borderRadius: '8px',
+              color: '#9ca3af',
+            }}
+          >
+            비디오 URL을 입력하세요
+          </div>
+        ) : data.videoType === 'youtube' ? (
+          youtubeEmbedUrl ? (
+            <iframe
+              width="100%"
+              height="100%"
+              src={videoUrl}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '2px dashed #d1d5db',
+                borderRadius: '8px',
+                color: '#9ca3af',
+              }}
+            >
+              유효하지 않은 YouTube URL입니다
+            </div>
+          )
         ) : (
           <video
             width="100%"

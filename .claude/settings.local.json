@@ -8,7 +8,8 @@
       "Bash(exit 0)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(timeout 5 tail:*)"
+      "Bash(timeout 5 tail:*)",
+      "Bash(timeout:*)"
     ]
   }
 }
