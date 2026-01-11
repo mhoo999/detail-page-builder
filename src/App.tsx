@@ -3,7 +3,6 @@ import { useBuilder } from './hooks/useBuilder'
 import { ComponentList } from './components/ComponentList'
 import { Canvas } from './components/Canvas'
 import { PropertyPanel } from './components/PropertyPanel'
-import { supabase } from './lib/supabase'
 import { Component } from './types'
 
 interface SavedPage {
@@ -12,6 +11,29 @@ interface SavedPage {
   content: { components: Component[] }
   created_at: string
   updated_at: string
+}
+
+const STORAGE_KEY = 'detail-page-builder-pages'
+
+// 로컬스토리지에서 페이지 목록 가져오기
+function getPagesFromStorage(): SavedPage[] {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY)
+    return data ? JSON.parse(data) : []
+  } catch (error) {
+    console.error('Error reading from localStorage:', error)
+    return []
+  }
+}
+
+// 로컬스토리지에 페이지 목록 저장하기
+function savePagesToStorage(pages: SavedPage[]): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pages))
+  } catch (error) {
+    console.error('Error writing to localStorage:', error)
+    alert('저장 공간이 부족합니다. 일부 페이지를 삭제해주세요.')
+  }
 }
 
 function App() {
@@ -45,40 +67,37 @@ function App() {
     URL.revokeObjectURL(url)
   }
 
-  const handleSave = async () => {
-    if (!supabase) {
-      alert('Supabase가 설정되지 않았습니다.\n.env 파일에 VITE_SUPABASE_URL과 VITE_SUPABASE_ANON_KEY를 추가해주세요.')
-      return
-    }
-
+  const handleSave = () => {
     setIsSaving(true)
     try {
+      const pages = getPagesFromStorage()
+      const now = new Date().toISOString()
+
       if (currentPageId) {
         // 기존 페이지 업데이트
-        const { error } = await supabase
-          .from('pages')
-          .update({
+        const pageIndex = pages.findIndex(p => p.id === currentPageId)
+        if (pageIndex !== -1) {
+          pages[pageIndex] = {
+            ...pages[pageIndex],
             title: pageTitle,
             content: { components },
-          })
-          .eq('id', currentPageId)
-
-        if (error) throw error
-        alert('페이지가 업데이트되었습니다!')
+            updated_at: now,
+          }
+          savePagesToStorage(pages)
+          alert('페이지가 업데이트되었습니다!')
+        }
       } else {
         // 새 페이지 저장
-        const { data, error } = await supabase
-          .from('pages')
-          .insert({
-            title: pageTitle,
-            content: { components },
-          })
-          .select()
-
-        if (error) throw error
-        if (data && data[0]) {
-          setCurrentPageId(data[0].id)
+        const newPage: SavedPage = {
+          id: Date.now().toString(),
+          title: pageTitle,
+          content: { components },
+          created_at: now,
+          updated_at: now,
         }
+        pages.unshift(newPage) // 최신 페이지를 맨 앞에 추가
+        savePagesToStorage(pages)
+        setCurrentPageId(newPage.id)
         alert('페이지가 저장되었습니다!')
       }
 
@@ -86,25 +105,17 @@ function App() {
       loadPages()
     } catch (error) {
       console.error('Error saving page:', error)
-      alert('저장 중 오류가 발생했습니다. Supabase 설정을 확인해주세요.')
+      alert('저장 중 오류가 발생했습니다.')
     } finally {
       setIsSaving(false)
     }
   }
 
-  const loadPages = async () => {
-    if (!supabase) return
-
+  const loadPages = () => {
     setIsLoadingPages(true)
     try {
-      const { data, error } = await supabase
-        .from('pages')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-
-      setSavedPages(data || [])
+      const pages = getPagesFromStorage()
+      setSavedPages(pages)
     } catch (error) {
       console.error('Error loading pages:', error)
       alert('페이지 목록을 불러오는 중 오류가 발생했습니다.')
@@ -121,17 +132,13 @@ function App() {
     selectComponent(null)
   }
 
-  const deletePage = async (id: string) => {
-    if (!supabase) return
+  const deletePage = (id: string) => {
     if (!confirm('정말 이 페이지를 삭제하시겠습니까?')) return
 
     try {
-      const { error } = await supabase
-        .from('pages')
-        .delete()
-        .eq('id', id)
-
-      if (error) throw error
+      const pages = getPagesFromStorage()
+      const filteredPages = pages.filter(p => p.id !== id)
+      savePagesToStorage(filteredPages)
 
       alert('페이지가 삭제되었습니다.')
       loadPages()
@@ -161,9 +168,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (supabase) {
-      loadPages()
-    }
+    loadPages()
   }, [])
 
   return (
@@ -191,14 +196,12 @@ function App() {
             >
               새 페이지
             </button>
-            {supabase && (
-              <button
-                onClick={() => setShowPageList(!showPageList)}
-                className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition"
-              >
-                페이지 관리
-              </button>
-            )}
+            <button
+              onClick={() => setShowPageList(!showPageList)}
+              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition"
+            >
+              페이지 관리
+            </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
