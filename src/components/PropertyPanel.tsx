@@ -363,7 +363,7 @@ function VideoProperties({ component, updateData }: {
           onChange={(v) => updateData('videoType', v)}
           options={[
             { value: 'youtube', label: 'YouTube' },
-            { value: 'url', label='직접 URL' },
+            { value: 'url', label: '직접 URL' },
           ]}
         />
         <TextInput
