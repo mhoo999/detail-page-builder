@@ -23,8 +23,8 @@ export function Canvas({
   }
 
   return (
-    <main className="flex-1 p-6 overflow-y-auto bg-gray-100">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg min-h-full p-8">
+    <main className="flex-1 overflow-y-auto bg-gray-50">
+      <div className="w-full bg-white min-h-full">
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="canvas">
             {(provided, snapshot) => (
@@ -33,7 +33,7 @@ export function Canvas({
                 ref={provided.innerRef}
                 className={`min-h-[400px] ${
                   snapshot.isDraggingOver ? 'bg-blue-50' : ''
-                } ${components.length === 0 ? 'border-2 border-dashed border-gray-300 rounded-lg p-8' : ''}`}
+                } ${components.length === 0 ? 'border-2 border-dashed border-gray-300 rounded-lg p-8 m-6' : ''}`}
               >
                 {components.length === 0 ? (
                   <div className="text-center text-gray-400">

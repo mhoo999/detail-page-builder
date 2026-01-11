@@ -156,63 +156,77 @@ function generateHTML(components: Component[], title: string): string {
 
 function generateHeroHTML(comp: Extract<Component, { type: 'hero' }>): string {
   const { data } = comp
-  const bgStyle = data.backgroundType === 'image' && data.backgroundImage
-    ? `background-image: url(${data.backgroundImage}); background-size: cover; background-position: center;`
-    : `background-color: ${data.backgroundColor};`
-
   const alignMap = { left: 'flex-start', center: 'center', right: 'flex-end' }
   const justifyMap = { start: 'flex-start', center: 'center', end: 'flex-end' }
 
-  return `<div style="${bgStyle} height: ${data.height}; display: flex; flex-direction: column; align-items: ${alignMap[data.align]}; justify-content: ${justifyMap[data.justify]}; padding: 40px 20px;">
-  <div style="max-width: 800px; width: 100%; text-align: ${data.align};">
-    ${data.showSectionTitle ? `<div style="display: inline-block; background-color: ${data.sectionTitleBgColor}; color: ${data.sectionTitleColor}; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 16px;">${data.sectionTitle}</div>` : ''}
-    ${data.showTitle ? `<h1 style="font-size: ${data.titleSize}; font-weight: ${data.titleWeight}; color: ${data.titleColor}; margin-bottom: 16px;">${data.title}</h1>` : ''}
-    ${data.showDescription ? `<p style="font-size: ${data.descriptionSize}; font-weight: ${data.descriptionWeight}; color: ${data.descriptionColor}; margin-bottom: 24px; line-height: 1.6;">${data.description}</p>` : ''}
-    ${data.showButton ? `<button style="background-color: ${data.buttonBgColor}; color: ${data.buttonColor}; font-size: ${data.buttonSize}; font-weight: ${data.buttonWeight}; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer;">${data.buttonText}</button>` : ''}
+  const overlayImageHTML = data.showOverlayImage && data.overlayImage
+    ? `<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url(${data.overlayImage}); background-size: cover; background-position: center; opacity: 0.3; pointer-events: none;"></div>`
+    : ''
+
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; position: relative; min-height: ${data.height};">
+  ${overlayImageHTML}
+  <div style="max-width: 1140px; margin: 0 auto; padding: 40px 20px; height: ${data.height}; display: flex; flex-direction: column; align-items: ${alignMap[data.align]}; justify-content: ${justifyMap[data.justify]}; position: relative; z-index: 1;">
+    <div style="width: 100%; text-align: ${data.align};">
+      ${data.showSectionTitle ? `<div style="display: inline-block; background-color: ${data.sectionTitleBgColor}; color: ${data.sectionTitleColor}; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 16px;">${data.sectionTitle}</div>` : ''}
+      ${data.showTitle ? `<h1 style="font-size: ${data.titleSize}; font-weight: ${data.titleWeight}; color: ${data.titleColor}; margin-bottom: 16px;">${data.title}</h1>` : ''}
+      ${data.showDescription ? `<p style="font-size: ${data.descriptionSize}; font-weight: ${data.descriptionWeight}; color: ${data.descriptionColor}; margin-bottom: 24px; line-height: 1.6;">${data.description}</p>` : ''}
+      ${data.showDescriptionImage && data.descriptionImage ? `<div style="margin-bottom: 24px;"><img src="${data.descriptionImage}" alt="Description" style="max-width: 100%; height: auto; border-radius: 8px;"></div>` : ''}
+      ${data.showButton ? `<button style="background-color: ${data.buttonBgColor}; color: ${data.buttonColor}; font-size: ${data.buttonSize}; font-weight: ${data.buttonWeight}; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer;">${data.buttonText}</button>` : ''}
+    </div>
   </div>
 </div>`
 }
 
 function generateSliderHTML(comp: Extract<Component, { type: 'slider' }>): string {
   const { data } = comp
-  return `<div style="height: ${data.height}; position: relative; overflow: hidden;">
-  ${data.images.map((img, i) => `<img src="${img}" alt="Slide ${i + 1}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: ${i === 0 ? 1 : 0};">`).join('\n  ')}
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  <div style="max-width: ${data.imageWidth}; margin: 0 auto; height: ${data.height}; position: relative; overflow: hidden; border-radius: 8px;">
+    ${data.images.map((img, i) => `<img src="${img}" alt="Slide ${i + 1}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: ${i === 0 ? 1 : 0};">`).join('\n    ')}
+  </div>
 </div>`
 }
 
 function generateVideoHTML(comp: Extract<Component, { type: 'video' }>): string {
   const { data } = comp
-  if (data.videoType === 'youtube') {
-    const videoId = data.videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1]
-    const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : ''
-    return `<div style="height: ${data.height};">
-  <iframe width="100%" height="100%" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>
+  const videoId = data.videoType === 'youtube'
+    ? data.videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1]
+    : null
+
+  if (data.videoType === 'youtube' && videoId) {
+    return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  <div style="max-width: 1140px; margin: 0 auto; height: ${data.height};">
+    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+  </div>
 </div>`
   }
-  return `<div style="height: ${data.height};">
-  <video width="100%" height="100%" controls ${data.autoPlay ? 'autoplay' : ''} ${data.muted ? 'muted' : ''} ${data.loop ? 'loop' : ''} style="object-fit: cover;">
-    <source src="${data.videoUrl}">
-  </video>
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  <div style="max-width: 1140px; margin: 0 auto; height: ${data.height};">
+    <video width="100%" height="100%" controls ${data.autoPlay ? 'autoplay' : ''} ${data.muted ? 'muted' : ''} ${data.loop ? 'loop' : ''} style="object-fit: cover;">
+      <source src="${data.videoUrl}">
+    </video>
+  </div>
 </div>`
 }
 
 function generateDividerHTML(comp: Extract<Component, { type: 'divider' }>): string {
   const { data } = comp
-  return `<div style="height: ${data.height}; display: flex; align-items: center; justify-content: center;">
-  ${data.showLine ? `<div style="width: 100%; height: ${data.lineWidth}; background-color: ${data.lineColor}; border-style: ${data.lineStyle};"></div>` : ''}
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; height: ${data.height}; display: flex; align-items: center; justify-content: center;">
+  ${data.showLine ? `<div style="max-width: 1140px; width: 100%; padding: 0 20px;"><div style="width: 100%; height: ${data.lineWidth}; background-color: ${data.lineColor}; border-style: ${data.lineStyle};"></div></div>` : ''}
 </div>`
 }
 
 function generateGridHTML(comp: Extract<Component, { type: 'grid' }>): string {
   const { data } = comp
-  return `<div style="display: grid; grid-template-columns: repeat(${data.columns}, 1fr); gap: ${data.gap}; padding: 20px;">
-  ${data.items.map(item => `<div style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-    <img src="${item.image}" alt="${item.title}" style="width: 100%; height: 200px; object-fit: cover;">
-    <div style="padding: 16px;">
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  <div style="max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: repeat(${data.columns}, 1fr); gap: ${data.gap};">
+    ${data.items.map(item => `<div style="background-color: ${data.itemBackgroundColor}; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center;">
+      <div style="width: ${data.iconSize}; height: ${data.iconSize}; margin-bottom: 16px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+        <img src="${item.image}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
       <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">${item.title}</h3>
       <p style="font-size: 14px; color: #666;">${item.description}</p>
-    </div>
-  </div>`).join('\n  ')}
+    </div>`).join('\n    ')}
+  </div>
 </div>`
 }
 

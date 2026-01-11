@@ -35,9 +35,9 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
 
 // Default values for each component type
 export const DEFAULT_HERO: HeroComponent['data'] = {
-  backgroundType: 'color',
   backgroundColor: '#ffffff',
-  backgroundImage: '',
+  showOverlayImage: false,
+  overlayImage: '',
   showSectionTitle: true,
   sectionTitle: 'NEW ARRIVAL',
   sectionTitleColor: '#ffffff',
@@ -52,6 +52,8 @@ export const DEFAULT_HERO: HeroComponent['data'] = {
   descriptionSize: '18px',
   descriptionWeight: '400',
   descriptionColor: '#666666',
+  showDescriptionImage: false,
+  descriptionImage: '',
   showButton: true,
   buttonText: '자세히 보기',
   buttonSize: '16px',
@@ -64,7 +66,9 @@ export const DEFAULT_HERO: HeroComponent['data'] = {
 }
 
 export const DEFAULT_SLIDER: SliderComponent['data'] = {
+  backgroundColor: '#f3f4f6',
   images: ['https://via.placeholder.com/1200x600/3b82f6/ffffff?text=Slide+1'],
+  imageWidth: '1140px',
   height: '500px',
   autoPlay: false,
   interval: 3000,
@@ -72,6 +76,7 @@ export const DEFAULT_SLIDER: SliderComponent['data'] = {
 }
 
 export const DEFAULT_VIDEO: VideoComponent['data'] = {
+  backgroundColor: '#000000',
   videoType: 'youtube',
   videoUrl: '',
   height: '500px',
@@ -81,6 +86,7 @@ export const DEFAULT_VIDEO: VideoComponent['data'] = {
 }
 
 export const DEFAULT_DIVIDER: DividerComponent['data'] = {
+  backgroundColor: 'transparent',
   height: '40px',
   showLine: true,
   lineStyle: 'solid',
@@ -89,11 +95,14 @@ export const DEFAULT_DIVIDER: DividerComponent['data'] = {
 }
 
 export const DEFAULT_GRID: GridComponent['data'] = {
+  backgroundColor: '#ffffff',
+  itemBackgroundColor: '#ffffff',
   columns: 3,
   gap: '20px',
+  iconSize: '80px',
   items: [
-    { id: '1', image: 'https://via.placeholder.com/300', title: '아이템 1', description: '설명 1' },
-    { id: '2', image: 'https://via.placeholder.com/300', title: '아이템 2', description: '설명 2' },
-    { id: '3', image: 'https://via.placeholder.com/300', title: '아이템 3', description: '설명 3' },
+    { id: '1', image: 'https://via.placeholder.com/80', title: '아이템 1', description: '설명 1' },
+    { id: '2', image: 'https://via.placeholder.com/80', title: '아이템 2', description: '설명 2' },
+    { id: '3', image: 'https://via.placeholder.com/80', title: '아이템 3', description: '설명 3' },
   ],
 }

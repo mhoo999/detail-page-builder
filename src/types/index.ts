@@ -18,9 +18,9 @@ export interface HeroComponent {
   type: 'hero'
   data: {
     // Background
-    backgroundType: 'color' | 'image'
     backgroundColor: string
-    backgroundImage: string
+    showOverlayImage: boolean
+    overlayImage: string
 
     // Section Title (버튼 스타일)
     showSectionTitle: boolean
@@ -42,6 +42,10 @@ export interface HeroComponent {
     descriptionWeight: '400' | '500' | '600' | '700'
     descriptionColor: string
 
+    // Description Image
+    showDescriptionImage: boolean
+    descriptionImage: string
+
     // Button
     showButton: boolean
     buttonText: string
@@ -62,7 +66,9 @@ export interface SliderComponent {
   id: string
   type: 'slider'
   data: {
+    backgroundColor: string
     images: string[]
+    imageWidth: string
     height: string
     autoPlay: boolean
     interval: number
@@ -75,6 +81,7 @@ export interface VideoComponent {
   id: string
   type: 'video'
   data: {
+    backgroundColor: string
     videoType: 'youtube' | 'url'
     videoUrl: string
     height: string
@@ -89,6 +96,7 @@ export interface DividerComponent {
   id: string
   type: 'divider'
   data: {
+    backgroundColor: string
     height: string
     showLine: boolean
     lineStyle: 'solid' | 'dashed' | 'dotted'
@@ -102,8 +110,11 @@ export interface GridComponent {
   id: string
   type: 'grid'
   data: {
+    backgroundColor: string
+    itemBackgroundColor: string
     columns: number
     gap: string
+    iconSize: string
     items: {
       id: string
       image: string

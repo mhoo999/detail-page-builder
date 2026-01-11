@@ -60,26 +60,22 @@ function HeroProperties({ component, updateData }: {
     <div className="space-y-4">
       {/* Background */}
       <Section title="배경">
-        <Select
-          label="배경 타입"
-          value={data.backgroundType}
-          onChange={(v) => updateData('backgroundType', v)}
-          options={[
-            { value: 'color', label: '색상' },
-            { value: 'image', label: '이미지' },
-          ]}
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
         />
-        {data.backgroundType === 'color' ? (
-          <ColorInput
-            label="배경색"
-            value={data.backgroundColor}
-            onChange={(v) => updateData('backgroundColor', v)}
-          />
-        ) : (
+        <Toggle
+          label="오버레이 이미지"
+          value={data.showOverlayImage}
+          onChange={(v) => updateData('showOverlayImage', v)}
+        />
+        {data.showOverlayImage && (
           <TextInput
-            label="배경 이미지 URL"
-            value={data.backgroundImage}
-            onChange={(v) => updateData('backgroundImage', v)}
+            label="이미지 URL"
+            value={data.overlayImage}
+            onChange={(v) => updateData('overlayImage', v)}
+            placeholder="https://..."
           />
         )}
       </Section>
@@ -192,6 +188,23 @@ function HeroProperties({ component, updateData }: {
         )}
       </Section>
 
+      {/* Description Image */}
+      <Section title="설명 아래 이미지">
+        <Toggle
+          label="보이기"
+          value={data.showDescriptionImage}
+          onChange={(v) => updateData('showDescriptionImage', v)}
+        />
+        {data.showDescriptionImage && (
+          <TextInput
+            label="이미지 URL"
+            value={data.descriptionImage}
+            onChange={(v) => updateData('descriptionImage', v)}
+            placeholder="https://..."
+          />
+        )}
+      </Section>
+
       {/* Button */}
       <Section title="버튼">
         <Toggle
@@ -292,6 +305,14 @@ function SliderProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+      </Section>
+
       <Section title="이미지">
         {data.images.map((image, index) => (
           <div key={index} className="flex gap-2 mb-2">
@@ -319,6 +340,12 @@ function SliderProperties({ component, updateData }: {
       </Section>
 
       <Section title="설정">
+        <TextInput
+          label="이미지 너비"
+          value={data.imageWidth}
+          onChange={(v) => updateData('imageWidth', v)}
+          placeholder="1140px"
+        />
         <TextInput
           label="높이"
           value={data.height}
@@ -356,6 +383,14 @@ function VideoProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+      </Section>
+
       <Section title="비디오">
         <Select
           label="타입"
@@ -409,6 +444,14 @@ function DividerProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+      </Section>
+
       <Section title="구분선">
         <TextInput
           label="높이"
@@ -460,7 +503,7 @@ function GridProperties({ component, updateData }: {
   const addItem = () => {
     updateData('items', [
       ...data.items,
-      { id: `item-${Date.now()}`, image: 'https://via.placeholder.com/300', title: '새 아이템', description: '설명' },
+      { id: `item-${Date.now()}`, image: 'https://via.placeholder.com/80', title: '새 아이템', description: '설명' },
     ])
   }
 
@@ -476,6 +519,19 @@ function GridProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="섹션 배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <ColorInput
+          label="아이템 배경색"
+          value={data.itemBackgroundColor}
+          onChange={(v) => updateData('itemBackgroundColor', v)}
+        />
+      </Section>
+
       <Section title="레이아웃">
         <TextInput
           label="컬럼 수"
@@ -488,6 +544,12 @@ function GridProperties({ component, updateData }: {
           value={data.gap}
           onChange={(v) => updateData('gap', v)}
           placeholder="20px"
+        />
+        <TextInput
+          label="아이콘 크기"
+          value={data.iconSize}
+          onChange={(v) => updateData('iconSize', v)}
+          placeholder="80px"
         />
       </Section>
 
@@ -504,7 +566,7 @@ function GridProperties({ component, updateData }: {
               </button>
             </div>
             <TextInput
-              label="이미지 URL"
+              label="아이콘 URL"
               value={item.image}
               onChange={(v) => updateItem(index, 'image', v)}
             />
