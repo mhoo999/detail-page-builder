@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useBuilder } from '../hooks/useBuilder'
 import { ComponentList } from './ComponentList'
 import { Canvas } from './Canvas'
@@ -60,6 +60,9 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
   const [isLoadingPages, setIsLoadingPages] = useState(false)
   const [showPageList, setShowPageList] = useState(false)
   const [currentPageId, setCurrentPageId] = useState<string | null>(null)
+  
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isInitialMountRef = useRef(true)
 
   const handleExportHTML = () => {
     const html = generateHTML(components, pageTitle)
@@ -72,8 +75,10 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
     URL.revokeObjectURL(url)
   }
 
-  const handleSave = () => {
-    setIsSaving(true)
+  const autoSave = (silent = false) => {
+    if (!silent) {
+      setIsSaving(true)
+    }
     try {
       const pages = getPagesFromStorage()
       const now = new Date().toISOString()
@@ -89,7 +94,9 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
             updated_at: now,
           }
           savePagesToStorage(pages)
-          alert('페이지가 업데이트되었습니다!')
+          if (!silent) {
+            alert('페이지가 업데이트되었습니다!')
+          }
         }
       } else {
         // 새 페이지 저장
@@ -103,17 +110,29 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
         pages.unshift(newPage) // 최신 페이지를 맨 앞에 추가
         savePagesToStorage(pages)
         setCurrentPageId(newPage.id)
-        alert('페이지가 저장되었습니다!')
+        if (!silent) {
+          alert('페이지가 저장되었습니다!')
+        }
       }
 
       // 페이지 목록 새로고침
-      loadPages()
+      if (!silent) {
+        loadPages()
+      }
     } catch (error) {
       console.error('Error saving page:', error)
-      alert('저장 중 오류가 발생했습니다.')
+      if (!silent) {
+        alert('저장 중 오류가 발생했습니다.')
+      }
     } finally {
-      setIsSaving(false)
+      if (!silent) {
+        setIsSaving(false)
+      }
     }
+  }
+
+  const handleSave = () => {
+    autoSave(false)
   }
 
   const loadPages = () => {
@@ -180,7 +199,37 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
       setCurrentPageId(initialPage.id)
       selectComponent(null)
     }
+    // 초기 마운트 완료 표시
+    setTimeout(() => {
+      isInitialMountRef.current = false
+    }, 100)
   }, [initialPage, setComponents, selectComponent])
+
+  // 자동 저장: components 또는 pageTitle 변경 시 디바운스 적용
+  useEffect(() => {
+    // 초기 마운트 시에는 자동 저장하지 않음
+    if (isInitialMountRef.current) {
+      return
+    }
+
+    // 디바운스: 2초 후 자동 저장
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current)
+    }
+
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      // 컴포넌트가 하나라도 있거나, 페이지 제목이 기본값이 아니면 저장
+      if (components.length > 0 || pageTitle !== '새 페이지') {
+        autoSave(true)
+      }
+    }, 2000)
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current)
+      }
+    }
+  }, [components, pageTitle, currentPageId])
 
   return (
     <div className="h-screen flex flex-col bg-white">
