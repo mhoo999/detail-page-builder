@@ -1,10 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useBuilder } from './hooks/useBuilder'
 import { ComponentList } from './components/ComponentList'
 import { Canvas } from './components/Canvas'
 import { PropertyPanel } from './components/PropertyPanel'
 import { supabase } from './lib/supabase'
 import { Component } from './types'
+
+interface SavedPage {
+  id: string
+  title: string
+  content: { components: Component[] }
+  created_at: string
+  updated_at: string
+}
 
 function App() {
   const {
@@ -21,6 +29,10 @@ function App() {
 
   const [pageTitle, setPageTitle] = useState('새 페이지')
   const [isSaving, setIsSaving] = useState(false)
+  const [savedPages, setSavedPages] = useState<SavedPage[]>([])
+  const [isLoadingPages, setIsLoadingPages] = useState(false)
+  const [showPageList, setShowPageList] = useState(false)
+  const [currentPageId, setCurrentPageId] = useState<string | null>(null)
 
   const handleExportHTML = () => {
     const html = generateHTML(components, pageTitle)
@@ -41,17 +53,37 @@ function App() {
 
     setIsSaving(true)
     try {
-      const { data, error } = await supabase
-        .from('pages')
-        .insert({
-          title: pageTitle,
-          content: { components },
-        })
-        .select()
+      if (currentPageId) {
+        // 기존 페이지 업데이트
+        const { error } = await supabase
+          .from('pages')
+          .update({
+            title: pageTitle,
+            content: { components },
+          })
+          .eq('id', currentPageId)
 
-      if (error) throw error
+        if (error) throw error
+        alert('페이지가 업데이트되었습니다!')
+      } else {
+        // 새 페이지 저장
+        const { data, error } = await supabase
+          .from('pages')
+          .insert({
+            title: pageTitle,
+            content: { components },
+          })
+          .select()
 
-      alert('페이지가 저장되었습니다!')
+        if (error) throw error
+        if (data && data[0]) {
+          setCurrentPageId(data[0].id)
+        }
+        alert('페이지가 저장되었습니다!')
+      }
+
+      // 페이지 목록 새로고침
+      loadPages()
     } catch (error) {
       console.error('Error saving page:', error)
       alert('저장 중 오류가 발생했습니다. Supabase 설정을 확인해주세요.')
@@ -59,6 +91,80 @@ function App() {
       setIsSaving(false)
     }
   }
+
+  const loadPages = async () => {
+    if (!supabase) return
+
+    setIsLoadingPages(true)
+    try {
+      const { data, error } = await supabase
+        .from('pages')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      setSavedPages(data || [])
+    } catch (error) {
+      console.error('Error loading pages:', error)
+      alert('페이지 목록을 불러오는 중 오류가 발생했습니다.')
+    } finally {
+      setIsLoadingPages(false)
+    }
+  }
+
+  const loadPage = (page: SavedPage) => {
+    setComponents(page.content.components)
+    setPageTitle(page.title)
+    setCurrentPageId(page.id)
+    setShowPageList(false)
+    selectComponent(null)
+  }
+
+  const deletePage = async (id: string) => {
+    if (!supabase) return
+    if (!confirm('정말 이 페이지를 삭제하시겠습니까?')) return
+
+    try {
+      const { error } = await supabase
+        .from('pages')
+        .delete()
+        .eq('id', id)
+
+      if (error) throw error
+
+      alert('페이지가 삭제되었습니다.')
+      loadPages()
+
+      // 현재 열려있는 페이지가 삭제된 경우 초기화
+      if (currentPageId === id) {
+        setComponents([])
+        setPageTitle('새 페이지')
+        setCurrentPageId(null)
+      }
+    } catch (error) {
+      console.error('Error deleting page:', error)
+      alert('페이지 삭제 중 오류가 발생했습니다.')
+    }
+  }
+
+  const createNewPage = () => {
+    if (components.length > 0) {
+      if (!confirm('현재 작업 중인 내용이 사라집니다. 새 페이지를 만드시겠습니까?')) {
+        return
+      }
+    }
+    setComponents([])
+    setPageTitle('새 페이지')
+    setCurrentPageId(null)
+    selectComponent(null)
+  }
+
+  useEffect(() => {
+    if (supabase) {
+      loadPages()
+    }
+  }, [])
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
@@ -74,14 +180,31 @@ function App() {
               className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="페이지 제목"
             />
+            {currentPageId && (
+              <span className="text-sm text-gray-500">(편집 중)</span>
+            )}
           </div>
           <div className="flex gap-3">
+            <button
+              onClick={createNewPage}
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+            >
+              새 페이지
+            </button>
+            {supabase && (
+              <button
+                onClick={() => setShowPageList(!showPageList)}
+                className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition"
+              >
+                페이지 관리
+              </button>
+            )}
             <button
               onClick={handleSave}
               disabled={isSaving}
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition disabled:bg-blue-300"
             >
-              {isSaving ? '저장 중...' : '저장'}
+              {isSaving ? '저장 중...' : currentPageId ? '업데이트' : '저장'}
             </button>
             <button
               onClick={handleExportHTML}
@@ -92,6 +215,68 @@ function App() {
           </div>
         </div>
       </header>
+
+      {/* Page List Modal */}
+      {showPageList && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-800">저장된 페이지</h2>
+              <button
+                onClick={() => setShowPageList(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              {isLoadingPages ? (
+                <div className="text-center py-8 text-gray-500">로딩 중...</div>
+              ) : savedPages.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">저장된 페이지가 없습니다.</div>
+              ) : (
+                <div className="space-y-3">
+                  {savedPages.map((page) => (
+                    <div
+                      key={page.id}
+                      className={`border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition ${
+                        currentPageId === page.id ? 'ring-2 ring-blue-500' : ''
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-800">{page.title}</h3>
+                          <div className="text-sm text-gray-500 mt-1">
+                            <div>컴포넌트 {page.content.components.length}개</div>
+                            <div>생성: {new Date(page.created_at).toLocaleString('ko-KR')}</div>
+                            {page.updated_at !== page.created_at && (
+                              <div>수정: {new Date(page.updated_at).toLocaleString('ko-KR')}</div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                          <button
+                            onClick={() => loadPage(page)}
+                            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm"
+                          >
+                            불러오기
+                          </button>
+                          <button
+                            onClick={() => deletePage(page.id)}
+                            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
