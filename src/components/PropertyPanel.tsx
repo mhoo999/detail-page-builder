@@ -11,8 +11,8 @@ export function PropertyPanel({
 }: PropertyPanelProps) {
   if (!selectedComponent) {
     return (
-      <aside className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">속성</h2>
+      <aside className="w-80 bg-white border-l border-black p-4 overflow-y-auto">
+        <h2 className="text-lg font-semibold mb-4 text-black">속성</h2>
         <p className="text-sm text-gray-500">
           컴포넌트를 선택하면 여기에서 편집할 수 있습니다
         </p>
@@ -28,8 +28,8 @@ export function PropertyPanel({
   }
 
   return (
-    <aside className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto">
-      <h2 className="text-lg font-semibold mb-4 text-gray-700">속성</h2>
+    <aside className="w-80 bg-white border-l border-black p-4 overflow-y-auto">
+      <h2 className="text-lg font-semibold mb-4 text-black">속성</h2>
 
       {selectedComponent.type === 'hero' && (
         <HeroProperties component={selectedComponent} updateData={updateData} />
@@ -320,12 +320,12 @@ function SliderProperties({ component, updateData }: {
               type="text"
               value={image}
               onChange={(e) => updateImage(index, e.target.value)}
-              className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
+              className="flex-1 px-2 py-1 text-sm border border-black rounded-none"
               placeholder="이미지 URL"
             />
             <button
               onClick={() => removeImage(index)}
-              className="px-2 py-1 text-sm bg-red-500 text-white rounded"
+              className="px-2 py-1 text-sm bg-white text-black border border-black hover:bg-gray-100"
             >
               삭제
             </button>
@@ -333,7 +333,7 @@ function SliderProperties({ component, updateData }: {
         ))}
         <button
           onClick={addImage}
-          className="w-full px-3 py-2 text-sm bg-blue-500 text-white rounded"
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
         >
           + 이미지 추가
         </button>
@@ -555,12 +555,12 @@ function GridProperties({ component, updateData }: {
 
       <Section title="아이템">
         {data.items.map((item, index) => (
-          <div key={item.id} className="p-3 border border-gray-200 rounded mb-3">
+          <div key={item.id} className="p-3 border border-black mb-3">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-medium">아이템 {index + 1}</span>
               <button
                 onClick={() => removeItem(index)}
-                className="px-2 py-1 text-xs bg-red-500 text-white rounded"
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
               >
                 삭제
               </button>
@@ -584,7 +584,7 @@ function GridProperties({ component, updateData }: {
         ))}
         <button
           onClick={addItem}
-          className="w-full px-3 py-2 text-sm bg-blue-500 text-white rounded"
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
         >
           + 아이템 추가
         </button>
@@ -596,8 +596,8 @@ function GridProperties({ component, updateData }: {
 // UI Components
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="border-b border-gray-200 pb-4">
-      <h3 className="text-sm font-semibold text-gray-700 mb-3">{title}</h3>
+    <div className="border-b border-black pb-4">
+      <h3 className="text-sm font-semibold text-black mb-3">{title}</h3>
       <div className="space-y-3">{children}</div>
     </div>
   )
@@ -617,7 +617,7 @@ function TextInput({ label, value, onChange, placeholder }: {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full px-2 py-1 text-sm border border-black rounded-none focus:outline-none focus:ring-0"
       />
     </div>
   )
@@ -635,7 +635,7 @@ function TextArea({ label, value, onChange }: {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={3}
-        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full px-2 py-1 text-sm border border-black rounded-none focus:outline-none focus:ring-0"
       />
     </div>
   )
@@ -654,13 +654,13 @@ function ColorInput({ label, value, onChange }: {
           type="color"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-12 h-8 border border-gray-300 rounded cursor-pointer"
+          className="w-12 h-8 border border-black rounded-none cursor-pointer"
         />
         <input
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="flex-1 px-2 py-1 text-sm border border-black rounded-none focus:outline-none focus:ring-0"
         />
       </div>
     </div>
@@ -679,7 +679,7 @@ function Select({ label, value, onChange, options }: {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full px-2 py-1 text-sm border border-black rounded-none focus:outline-none focus:ring-0"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -701,8 +701,8 @@ function Toggle({ label, value, onChange }: {
       <label className="text-xs font-medium text-gray-600">{label}</label>
       <button
         onClick={() => onChange(!value)}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-          value ? 'bg-blue-600' : 'bg-gray-300'
+        className={`relative inline-flex h-6 w-11 items-center border border-black ${
+          value ? 'bg-black' : 'bg-white'
         }`}
       >
         <span

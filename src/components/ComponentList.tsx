@@ -53,19 +53,19 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
   }
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto">
-      <h2 className="text-lg font-semibold mb-4 text-gray-700">컴포넌트</h2>
+    <aside className="w-64 bg-white border-r border-black p-4 overflow-y-auto">
+      <h2 className="text-lg font-semibold mb-4 text-black">컴포넌트</h2>
       <div className="space-y-2">
         {COMPONENT_TEMPLATES.map((template) => (
           <div
             key={template.type}
-            className="p-3 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition"
+            className="p-3 bg-white border border-black cursor-pointer hover:bg-gray-100"
             onClick={() => handleClick(template)}
           >
-            <p className="font-medium text-blue-800">
+            <p className="font-medium text-black">
               {template.icon} {template.label}
             </p>
-            <p className="text-xs text-blue-600">{template.description}</p>
+            <p className="text-xs text-gray-600">{template.description}</p>
           </div>
         ))}
       </div>

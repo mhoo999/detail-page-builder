@@ -172,17 +172,17 @@ function App() {
   }, [])
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className="h-screen flex flex-col bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+      <header className="bg-white border-b border-black px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-gray-800">상세페이지 빌더</h1>
+            <h1 className="text-2xl font-bold text-black">상세페이지 빌더</h1>
             <input
               type="text"
               value={pageTitle}
               onChange={(e) => setPageTitle(e.target.value)}
-              className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-1 border border-black rounded-none focus:outline-none focus:ring-0"
               placeholder="페이지 제목"
             />
             {currentPageId && (
@@ -192,26 +192,26 @@ function App() {
           <div className="flex gap-3">
             <button
               onClick={createNewPage}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+              className="px-4 py-2 bg-black text-white rounded-none hover:bg-gray-800 border border-black"
             >
               새 페이지
             </button>
             <button
               onClick={() => setShowPageList(!showPageList)}
-              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition"
+              className="px-4 py-2 bg-white text-black rounded-none hover:bg-gray-100 border border-black"
             >
               페이지 관리
             </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition disabled:bg-blue-300"
+              className="px-4 py-2 bg-black text-white rounded-none hover:bg-gray-800 border border-black disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isSaving ? '저장 중...' : currentPageId ? '업데이트' : '저장'}
             </button>
             <button
               onClick={handleExportHTML}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+              className="px-4 py-2 bg-white text-black rounded-none hover:bg-gray-100 border border-black"
             >
               HTML 내보내기
             </button>
@@ -222,12 +222,12 @@ function App() {
       {/* Page List Modal */}
       {showPageList && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
-            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-800">저장된 페이지</h2>
+          <div className="bg-white border-2 border-black w-full max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+            <div className="px-6 py-4 border-b border-black flex items-center justify-between">
+              <h2 className="text-xl font-bold text-black">저장된 페이지</h2>
               <button
                 onClick={() => setShowPageList(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
+                className="text-black hover:text-gray-600 text-2xl"
               >
                 ×
               </button>
@@ -242,13 +242,13 @@ function App() {
                   {savedPages.map((page) => (
                     <div
                       key={page.id}
-                      className={`border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition ${
-                        currentPageId === page.id ? 'ring-2 ring-blue-500' : ''
+                      className={`border border-black p-4 hover:bg-gray-50 ${
+                        currentPageId === page.id ? 'border-2 border-black bg-gray-100' : ''
                       }`}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-gray-800">{page.title}</h3>
+                          <h3 className="font-semibold text-black">{page.title}</h3>
                           <div className="text-sm text-gray-500 mt-1">
                             <div>컴포넌트 {page.content.components.length}개</div>
                             <div>생성: {new Date(page.created_at).toLocaleString('ko-KR')}</div>
@@ -260,13 +260,13 @@ function App() {
                         <div className="flex gap-2 ml-4">
                           <button
                             onClick={() => loadPage(page)}
-                            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm"
+                            className="px-3 py-1 bg-black text-white border border-black hover:bg-gray-800 text-sm"
                           >
                             불러오기
                           </button>
                           <button
                             onClick={() => deletePage(page.id)}
-                            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
+                            className="px-3 py-1 bg-white text-black border border-black hover:bg-gray-100 text-sm"
                           >
                             삭제
                           </button>

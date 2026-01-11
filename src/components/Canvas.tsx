@@ -23,7 +23,7 @@ export function Canvas({
   }
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-50">
+    <main className="flex-1 overflow-y-auto bg-white">
       <div className="w-full bg-white min-h-full">
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="canvas">
@@ -32,8 +32,8 @@ export function Canvas({
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className={`min-h-[400px] ${
-                  snapshot.isDraggingOver ? 'bg-blue-50' : ''
-                } ${components.length === 0 ? 'border-2 border-dashed border-gray-300 rounded-lg p-8 m-6' : ''}`}
+                  snapshot.isDraggingOver ? 'bg-gray-100' : ''
+                } ${components.length === 0 ? 'border-2 border-dashed border-black p-8 m-6' : ''}`}
               >
                 {components.length === 0 ? (
                   <div className="text-center text-gray-400">
@@ -53,8 +53,8 @@ export function Canvas({
                           {...provided.dragHandleProps}
                           className={`mb-4 relative group ${
                             selectedComponentId === component.id
-                              ? 'ring-2 ring-blue-500 ring-offset-2'
-                              : ''
+                              ? 'border-2 border-black'
+                              : 'border-2 border-transparent'
                           } ${snapshot.isDragging ? 'opacity-50' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation()
@@ -63,7 +63,7 @@ export function Canvas({
                         >
                           <RenderComponent component={component} />
                           <button
-                            className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
+                            className="absolute top-2 right-2 bg-black text-white px-2 py-1 border border-black opacity-0 group-hover:opacity-100"
                             onClick={(e) => {
                               e.stopPropagation()
                               onDeleteComponent(component.id)

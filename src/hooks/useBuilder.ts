@@ -12,7 +12,7 @@ export function useBuilder() {
   const updateComponent = (id: string, updates: Partial<Component>) => {
     setComponents(
       components.map((comp) =>
-        comp.id === id ? { ...comp, ...updates } : comp
+        comp.id === id ? { ...comp, ...updates } as Component : comp
       )
     )
   }
