@@ -62,9 +62,9 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
   const [currentPageId, setCurrentPageId] = useState<string | null>(null)
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
   
-  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const autoSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isInitialMountRef = useRef(true)
-  const savedMessageTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const savedMessageTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleExportHTML = () => {
     const html = generateHTML(components, pageTitle)
