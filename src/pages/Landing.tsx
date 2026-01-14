@@ -143,7 +143,7 @@ export function Landing({ onStart, onLoadPage, onDeletePage }: LandingProps) {
               다른 서비스 이용해보기
             </a>
             <a
-              href="https://buymeacoffee.com/hoonsdev"
+              href="https://hoons-service-archive.vercel.app/#coffee"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 bg-black text-white border border-black hover:bg-gray-800"
