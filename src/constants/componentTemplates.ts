@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -36,6 +36,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: '표',
     description: '데이터를 표 형식으로 표시',
     icon: '📊',
+  },
+  {
+    type: 'faq',
+    label: 'FAQ/아코디언',
+    description: '자주 묻는 질문을 접었다 펼 수 있는 형태',
+    icon: '❓',
   },
 ]
 
@@ -132,5 +138,25 @@ export const DEFAULT_TABLE: TableComponent['data'] = {
   rows: [
     { id: 'row1', cells: ['항목 1', '내용 1'] },
     { id: 'row2', cells: ['항목 2', '내용 2'] },
+  ],
+}
+
+export const DEFAULT_FAQ: FAQComponent['data'] = {
+  backgroundColor: '#ffffff',
+  height: 'auto',
+  titleText: '자주 묻는 질문',
+  titleSize: '28',
+  titleWeight: '700',
+  titleColor: '#000000',
+  showTitle: true,
+  questionColor: '#000000',
+  questionBgColor: '#f9fafb',
+  answerColor: '#666666',
+  answerBgColor: '#ffffff',
+  borderColor: '#e5e7eb',
+  iconColor: '#000000',
+  items: [
+    { id: 'faq1', question: '질문 1을 입력하세요', answer: '답변 1을 입력하세요' },
+    { id: 'faq2', question: '질문 2를 입력하세요', answer: '답변 2를 입력하세요' },
   ],
 }

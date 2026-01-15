@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -153,6 +153,32 @@ export interface TableComponent {
   }
 }
 
+// FAQ/Accordion Component
+export interface FAQComponent {
+  id: string
+  type: 'faq'
+  data: {
+    backgroundColor: string
+    height?: string
+    titleText: string
+    titleSize: string
+    titleWeight: '400' | '500' | '600' | '700'
+    titleColor: string
+    showTitle: boolean
+    questionColor: string
+    questionBgColor: string
+    answerColor: string
+    answerBgColor: string
+    borderColor: string
+    iconColor: string
+    items: {
+      id: string
+      question: string
+      answer: string
+    }[]
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -160,6 +186,7 @@ export type Component =
   | DividerComponent
   | GridComponent
   | TableComponent
+  | FAQComponent
 
 export interface ComponentTemplate {
   type: ComponentType

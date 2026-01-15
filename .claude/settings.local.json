@@ -10,7 +10,8 @@
       "Bash(git commit:*)",
       "Bash(timeout 5 tail:*)",
       "Bash(timeout:*)",
-      "Bash(ping:*)"
+      "Bash(ping:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

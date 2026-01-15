@@ -47,11 +47,14 @@ export function PropertyPanel({
         <GridProperties component={selectedComponent} updateData={updateData} />
       )}
       {selectedComponent.type === 'table' && (
-        <TableProperties 
-          component={selectedComponent} 
+        <TableProperties
+          component={selectedComponent}
           updateData={updateData}
           onUpdateComponent={onUpdateComponent}
         />
+      )}
+      {selectedComponent.type === 'faq' && (
+        <FAQProperties component={selectedComponent} updateData={updateData} />
       )}
     </aside>
   )
@@ -815,6 +818,156 @@ function TableProperties({ component, updateData, onUpdateComponent }: {
           className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
         >
           + 행 추가
+        </button>
+      </Section>
+    </div>
+  )
+}
+
+function FAQProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'faq' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addItem = () => {
+    updateData('items', [
+      ...data.items,
+      { id: `faq-${Date.now()}`, question: '새 질문을 입력하세요', answer: '답변을 입력하세요' },
+    ])
+  }
+
+  const updateItem = (index: number, field: string, value: string) => {
+    const newItems = [...data.items]
+    newItems[index] = { ...newItems[index], [field]: value }
+    updateData('items', newItems)
+  }
+
+  const removeItem = (index: number) => {
+    if (data.items.length <= 1) {
+      alert('최소 1개의 항목이 필요합니다.')
+      return
+    }
+    updateData('items', data.items.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="타이틀">
+        <Toggle
+          label="타이틀 표시"
+          value={data.showTitle}
+          onChange={(v) => updateData('showTitle', v)}
+        />
+        {data.showTitle && (
+          <>
+            <TextInput
+              label="타이틀 텍스트"
+              value={data.titleText}
+              onChange={(v) => updateData('titleText', v)}
+            />
+            <TextInput
+              label="크기"
+              value={data.titleSize.replace('px', '')}
+              onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="28"
+            />
+            <Select
+              label="굵기"
+              value={data.titleWeight}
+              onChange={(v) => updateData('titleWeight', v)}
+              options={[
+                { value: '400', label: 'Regular' },
+                { value: '500', label: 'Medium' },
+                { value: '600', label: 'SemiBold' },
+                { value: '700', label: 'Bold' },
+              ]}
+            />
+            <ColorInput
+              label="색상"
+              value={data.titleColor}
+              onChange={(v) => updateData('titleColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="스타일">
+        <ColorInput
+          label="질문 배경색"
+          value={data.questionBgColor}
+          onChange={(v) => updateData('questionBgColor', v)}
+        />
+        <ColorInput
+          label="질문 텍스트 색상"
+          value={data.questionColor}
+          onChange={(v) => updateData('questionColor', v)}
+        />
+        <ColorInput
+          label="답변 배경색"
+          value={data.answerBgColor}
+          onChange={(v) => updateData('answerBgColor', v)}
+        />
+        <ColorInput
+          label="답변 텍스트 색상"
+          value={data.answerColor}
+          onChange={(v) => updateData('answerColor', v)}
+        />
+        <ColorInput
+          label="테두리 색상"
+          value={data.borderColor}
+          onChange={(v) => updateData('borderColor', v)}
+        />
+        <ColorInput
+          label="아이콘 색상"
+          value={data.iconColor}
+          onChange={(v) => updateData('iconColor', v)}
+        />
+      </Section>
+
+      <Section title="항목">
+        {data.items.map((item, index) => (
+          <div key={item.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">항목 {index + 1}</span>
+              <button
+                onClick={() => removeItem(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <TextInput
+              label="질문"
+              value={item.question}
+              onChange={(v) => updateItem(index, 'question', v)}
+            />
+            <TextArea
+              label="답변"
+              value={item.answer}
+              onChange={(v) => updateItem(index, 'answer', v)}
+            />
+          </div>
+        ))}
+        <button
+          onClick={addItem}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 항목 추가
         </button>
       </Section>
     </div>

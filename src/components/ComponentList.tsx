@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE } from '../constants/componentTemplates'
-import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -49,12 +49,22 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
         newComponent = {
           id: `table-${Date.now()}`,
           type: 'table',
-          data: { 
-            ...DEFAULT_TABLE, 
+          data: {
+            ...DEFAULT_TABLE,
             columns: DEFAULT_TABLE.columns.map(col => ({ ...col })),
             rows: DEFAULT_TABLE.rows.map(row => ({ ...row, cells: [...row.cells] }))
           },
         } as TableComponent
+        break
+      case 'faq':
+        newComponent = {
+          id: `faq-${Date.now()}`,
+          type: 'faq',
+          data: {
+            ...DEFAULT_FAQ,
+            items: DEFAULT_FAQ.items.map(item => ({ ...item }))
+          },
+        } as FAQComponent
         break
       default:
         return

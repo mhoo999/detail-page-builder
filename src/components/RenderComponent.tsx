@@ -19,6 +19,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <GridRenderer component={component} />
       case 'table':
         return <TableRenderer component={component} />
+      case 'faq':
+        return <FAQRenderer component={component} />
       default:
         return null
   }
@@ -546,6 +548,108 @@ function TableRenderer({ component }: { component: Extract<Component, { type: 't
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
+  )
+}
+
+function FAQRenderer({ component }: { component: Extract<Component, { type: 'faq' }> }) {
+  const { data } = component
+  const [openItems, setOpenItems] = useState<Set<string>>(new Set())
+
+  const toggleItem = (id: string) => {
+    setOpenItems(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(id)) {
+        newSet.delete(id)
+      } else {
+        newSet.add(id)
+      }
+      return newSet
+    })
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        {data.showTitle && (
+          <h2
+            style={{
+              fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+              fontWeight: data.titleWeight,
+              color: data.titleColor,
+              marginBottom: '24px',
+              textAlign: 'center',
+            }}
+          >
+            {data.titleText}
+          </h2>
+        )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {data.items.map((item) => {
+            const isOpen = openItems.has(item.id)
+            return (
+              <div
+                key={item.id}
+                style={{
+                  border: `1px solid ${data.borderColor}`,
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleItem(item.id)
+                  }}
+                  style={{
+                    backgroundColor: data.questionBgColor,
+                    color: data.questionColor,
+                    padding: '16px 20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                  }}
+                >
+                  <span>{item.question}</span>
+                  <span
+                    style={{
+                      color: data.iconColor,
+                      fontSize: '20px',
+                      transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease',
+                    }}
+                  >
+                    ▼
+                  </span>
+                </div>
+                {isOpen && (
+                  <div
+                    style={{
+                      backgroundColor: data.answerBgColor,
+                      color: data.answerColor,
+                      padding: '16px 20px',
+                      lineHeight: '1.6',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {item.answer}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
