@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN, DEFAULT_REVIEW } from '../constants/componentTemplates'
-import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN, DEFAULT_REVIEW, DEFAULT_ICON_LIST } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -103,6 +103,13 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
           type: 'review',
           data: { ...DEFAULT_REVIEW, items: DEFAULT_REVIEW.items.map(item => ({ ...item })) },
         } as ReviewComponent
+        break
+      case 'iconList':
+        newComponent = {
+          id: `iconList-${Date.now()}`,
+          type: 'iconList',
+          data: { ...DEFAULT_ICON_LIST, items: DEFAULT_ICON_LIST.items.map(item => ({ ...item })) },
+        } as IconListComponent
         break
       default:
         return

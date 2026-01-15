@@ -31,6 +31,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <CountdownRenderer component={component} />
       case 'review':
         return <ReviewRenderer component={component} />
+      case 'iconList':
+        return <IconListRenderer component={component} />
       default:
         return null
   }
@@ -1227,6 +1229,77 @@ function ReviewRenderer({ component }: { component: Extract<Component, { type: '
               ))}
             </div>
           )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function IconListRenderer({ component }: { component: Extract<Component, { type: 'iconList' }> }) {
+  const { data } = component
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        {data.showTitle && (
+          <h2
+            style={{
+              fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+              fontWeight: data.titleWeight,
+              color: data.titleColor,
+              marginBottom: '24px',
+              textAlign: 'center',
+            }}
+          >
+            {data.title}
+          </h2>
+        )}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: data.layout === 'horizontal' ? 'row' : 'column',
+            flexWrap: data.layout === 'horizontal' ? 'wrap' : 'nowrap',
+            gap: data.gap,
+            justifyContent: data.layout === 'horizontal' ? 'center' : 'flex-start',
+            alignItems: data.layout === 'horizontal' ? 'center' : 'flex-start',
+          }}
+        >
+          {data.items.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: data.iconSize.includes('px') ? data.iconSize : `${data.iconSize}px`,
+                  color: data.iconColor,
+                  lineHeight: '1',
+                }}
+              >
+                {item.icon}
+              </span>
+              <span
+                style={{
+                  fontSize: data.textSize.includes('px') ? data.textSize : `${data.textSize}px`,
+                  color: data.textColor,
+                }}
+              >
+                {item.text}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

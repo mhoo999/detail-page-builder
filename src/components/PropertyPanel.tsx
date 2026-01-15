@@ -71,6 +71,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'review' && (
         <ReviewProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'iconList' && (
+        <IconListProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -1595,6 +1598,169 @@ function ReviewProperties({ component, updateData }: {
           className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
         >
           + 후기 추가
+        </button>
+      </Section>
+    </div>
+  )
+}
+
+function IconListProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'iconList' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addItem = () => {
+    updateData('items', [
+      ...data.items,
+      { id: `icon-${Date.now()}`, icon: '✓', text: '새 항목' },
+    ])
+  }
+
+  const updateItem = (index: number, field: string, value: string) => {
+    const newItems = [...data.items]
+    newItems[index] = { ...newItems[index], [field]: value }
+    updateData('items', newItems)
+  }
+
+  const removeItem = (index: number) => {
+    if (data.items.length <= 1) {
+      alert('최소 1개의 항목이 필요합니다.')
+      return
+    }
+    updateData('items', data.items.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="타이틀">
+        <Toggle
+          label="타이틀 표시"
+          value={data.showTitle}
+          onChange={(v) => updateData('showTitle', v)}
+        />
+        {data.showTitle && (
+          <>
+            <TextInput
+              label="타이틀 텍스트"
+              value={data.title}
+              onChange={(v) => updateData('title', v)}
+            />
+            <TextInput
+              label="크기"
+              value={data.titleSize.replace('px', '')}
+              onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="28"
+            />
+            <Select
+              label="굵기"
+              value={data.titleWeight}
+              onChange={(v) => updateData('titleWeight', v)}
+              options={[
+                { value: '400', label: 'Regular' },
+                { value: '500', label: 'Medium' },
+                { value: '600', label: 'SemiBold' },
+                { value: '700', label: 'Bold' },
+              ]}
+            />
+            <ColorInput
+              label="색상"
+              value={data.titleColor}
+              onChange={(v) => updateData('titleColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="레이아웃">
+        <Select
+          label="정렬 방향"
+          value={data.layout}
+          onChange={(v) => updateData('layout', v)}
+          options={[
+            { value: 'vertical', label: '세로' },
+            { value: 'horizontal', label: '가로' },
+          ]}
+        />
+        <TextInput
+          label="간격"
+          value={data.gap}
+          onChange={(v) => updateData('gap', v)}
+          placeholder="16px"
+        />
+      </Section>
+
+      <Section title="아이콘 스타일">
+        <TextInput
+          label="아이콘 크기"
+          value={data.iconSize.replace('px', '')}
+          onChange={(v) => updateData('iconSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="24"
+        />
+        <ColorInput
+          label="아이콘 색상"
+          value={data.iconColor}
+          onChange={(v) => updateData('iconColor', v)}
+        />
+      </Section>
+
+      <Section title="텍스트 스타일">
+        <TextInput
+          label="텍스트 크기"
+          value={data.textSize.replace('px', '')}
+          onChange={(v) => updateData('textSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="16"
+        />
+        <ColorInput
+          label="텍스트 색상"
+          value={data.textColor}
+          onChange={(v) => updateData('textColor', v)}
+        />
+      </Section>
+
+      <Section title="항목">
+        {data.items.map((item, index) => (
+          <div key={item.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">항목 {index + 1}</span>
+              <button
+                onClick={() => removeItem(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <TextInput
+              label="아이콘"
+              value={item.icon}
+              onChange={(v) => updateItem(index, 'icon', v)}
+            />
+            <TextInput
+              label="텍스트"
+              value={item.text}
+              onChange={(v) => updateItem(index, 'text', v)}
+            />
+          </div>
+        ))}
+        <button
+          onClick={addItem}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 항목 추가
         </button>
       </Section>
     </div>

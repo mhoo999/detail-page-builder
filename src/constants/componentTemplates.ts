@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -72,6 +72,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: '리뷰/후기',
     description: '고객 후기를 캐러셀 형태로 표시',
     icon: '⭐',
+  },
+  {
+    type: 'iconList',
+    label: '아이콘 리스트',
+    description: '아이콘과 텍스트로 특징 나열',
+    icon: '✓',
   },
 ]
 
@@ -276,5 +282,27 @@ export const DEFAULT_REVIEW: ReviewComponent['data'] = {
     { id: 'review1', rating: 5, content: '정말 만족합니다! 품질이 좋고 배송도 빨라요.', author: '김**' },
     { id: 'review2', rating: 5, content: '재구매 의사 있습니다. 추천해요!', author: '이**' },
     { id: 'review3', rating: 4, content: '가격 대비 좋은 것 같아요.', author: '박**' },
+  ],
+}
+
+export const DEFAULT_ICON_LIST: IconListComponent['data'] = {
+  backgroundColor: '#ffffff',
+  height: 'auto',
+  showTitle: true,
+  title: '주요 특징',
+  titleSize: '28',
+  titleWeight: '700',
+  titleColor: '#000000',
+  layout: 'vertical',
+  iconSize: '24',
+  iconColor: '#22c55e',
+  textColor: '#333333',
+  textSize: '16',
+  gap: '16px',
+  items: [
+    { id: 'icon1', icon: '✓', text: '무료 배송' },
+    { id: 'icon2', icon: '✓', text: '30일 무료 반품' },
+    { id: 'icon3', icon: '✓', text: '1년 품질 보증' },
+    { id: 'icon4', icon: '✓', text: '24시간 고객 지원' },
   ],
 }

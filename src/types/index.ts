@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review' | 'iconList'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -293,6 +293,32 @@ export interface ReviewComponent {
   }
 }
 
+// Icon List Component
+export interface IconListComponent {
+  id: string
+  type: 'iconList'
+  data: {
+    backgroundColor: string
+    height?: string
+    showTitle: boolean
+    title: string
+    titleSize: string
+    titleWeight: '400' | '500' | '600' | '700'
+    titleColor: string
+    layout: 'horizontal' | 'vertical'
+    iconSize: string
+    iconColor: string
+    textColor: string
+    textSize: string
+    gap: string
+    items: {
+      id: string
+      icon: string
+      text: string
+    }[]
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -306,6 +332,7 @@ export type Component =
   | BeforeAfterComponent
   | CountdownComponent
   | ReviewComponent
+  | IconListComponent
 
 export interface ComponentTemplate {
   type: ComponentType
