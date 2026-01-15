@@ -77,6 +77,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'stickyBar' && (
         <StickyBarProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'quote' && (
+        <QuoteProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -1863,6 +1866,118 @@ function StickyBarProperties({ component, updateData }: {
           value={data.buttonBorderRadius}
           onChange={(v) => updateData('buttonBorderRadius', v)}
           placeholder="8px"
+        />
+      </Section>
+    </div>
+  )
+}
+
+function QuoteProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'quote' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="스타일">
+        <Select
+          label="스타일"
+          value={data.style}
+          onChange={(v) => updateData('style', v)}
+          options={[
+            { value: 'quote', label: '인용구' },
+            { value: 'highlight', label: '강조 박스' },
+            { value: 'callout', label: '콜아웃' },
+          ]}
+        />
+      </Section>
+
+      <Section title="텍스트">
+        <TextArea
+          label="텍스트"
+          value={data.text}
+          onChange={(v) => updateData('text', v)}
+        />
+        <TextInput
+          label="크기"
+          value={data.textSize.replace('px', '')}
+          onChange={(v) => updateData('textSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="20"
+        />
+        <Select
+          label="굵기"
+          value={data.textWeight}
+          onChange={(v) => updateData('textWeight', v)}
+          options={[
+            { value: '400', label: 'Regular' },
+            { value: '500', label: 'Medium' },
+            { value: '600', label: 'SemiBold' },
+            { value: '700', label: 'Bold' },
+          ]}
+        />
+        <ColorInput
+          label="텍스트 색상"
+          value={data.textColor}
+          onChange={(v) => updateData('textColor', v)}
+        />
+      </Section>
+
+      <Section title="작성자">
+        <Toggle
+          label="작성자 표시"
+          value={data.showAuthor}
+          onChange={(v) => updateData('showAuthor', v)}
+        />
+        {data.showAuthor && (
+          <>
+            <TextInput
+              label="작성자"
+              value={data.author}
+              onChange={(v) => updateData('author', v)}
+            />
+            <ColorInput
+              label="작성자 색상"
+              value={data.authorColor}
+              onChange={(v) => updateData('authorColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="테두리">
+        <ColorInput
+          label="테두리 색상"
+          value={data.borderColor}
+          onChange={(v) => updateData('borderColor', v)}
+        />
+        <TextInput
+          label="테두리 두께"
+          value={data.borderWidth}
+          onChange={(v) => updateData('borderWidth', v)}
+          placeholder="4px"
+        />
+      </Section>
+
+      <Section title="아이콘">
+        <ColorInput
+          label="아이콘 색상"
+          value={data.iconColor}
+          onChange={(v) => updateData('iconColor', v)}
         />
       </Section>
     </div>

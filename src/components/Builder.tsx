@@ -401,6 +401,8 @@ function generateHTML(components: Component[], title: string): string {
         return generateGridHTML(comp)
       case 'table':
         return generateTableHTML(comp)
+      case 'quote':
+        return generateQuoteHTML(comp)
       default:
         return ''
     }
@@ -663,6 +665,47 @@ function generateTableHTML(comp: Extract<Component, { type: 'table' }>): string 
       ${rows}
       </tbody>
     </table>
+  </div>
+</div>`
+}
+
+function generateQuoteHTML(comp: Extract<Component, { type: 'quote' }>): string {
+  const { data } = comp
+  const heightStyle = data.height && data.height !== 'auto' ? `min-height: ${data.height};` : ''
+  
+  const getQuoteStyle = () => {
+    switch (data.style) {
+      case 'quote':
+        return `border-left: ${data.borderWidth} solid ${data.borderColor}; padding-left: 24px; padding-right: 24px; padding-top: 20px; padding-bottom: 20px;`
+      case 'highlight':
+        return `background-color: ${data.borderColor}20; border: ${data.borderWidth} solid ${data.borderColor}; border-radius: 8px; padding: 24px;`
+      case 'callout':
+        return `border: ${data.borderWidth} solid ${data.borderColor}; border-radius: 8px; padding: 24px; position: relative;`
+      default:
+        return ''
+    }
+  }
+  
+  const quoteIcon = data.style === 'quote' 
+    ? `<div style="font-size: 48px; color: ${data.iconColor}; line-height: 1; margin-bottom: 8px;">"</div>`
+    : ''
+  
+  const calloutIcon = data.style === 'callout'
+    ? `<div style="position: absolute; top: -12px; left: 24px; background-color: ${data.backgroundColor}; padding: 0 8px; color: ${data.iconColor}; font-size: 24px;">💬</div>`
+    : ''
+  
+  const authorHTML = data.showAuthor
+    ? `<p style="font-size: 14px; color: ${data.authorColor}; font-style: italic; margin-top: 8px;">${data.author}</p>`
+    : ''
+  
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px; ${heightStyle}">
+  <div style="max-width: 1140px; margin: 0 auto;">
+    <div style="${getQuoteStyle()}">
+      ${calloutIcon}
+      ${quoteIcon}
+      <p style="font-size: ${data.textSize.includes('px') ? data.textSize : `${data.textSize}px`}; font-weight: ${data.textWeight}; color: ${data.textColor}; line-height: 1.6; margin-bottom: ${data.showAuthor ? '12px' : '0'}; white-space: pre-wrap;">${data.text}</p>
+      ${authorHTML}
+    </div>
   </div>
 </div>`
 }

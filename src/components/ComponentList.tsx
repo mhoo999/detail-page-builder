@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN, DEFAULT_REVIEW, DEFAULT_ICON_LIST, DEFAULT_STICKY_BAR } from '../constants/componentTemplates'
-import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN, DEFAULT_REVIEW, DEFAULT_ICON_LIST, DEFAULT_STICKY_BAR, DEFAULT_QUOTE } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent, QuoteComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -117,6 +117,13 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
           type: 'stickyBar',
           data: { ...DEFAULT_STICKY_BAR },
         } as StickyBarComponent
+        break
+      case 'quote':
+        newComponent = {
+          id: `quote-${Date.now()}`,
+          type: 'quote',
+          data: { ...DEFAULT_QUOTE },
+        } as QuoteComponent
         break
       default:
         return

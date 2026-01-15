@@ -35,6 +35,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <IconListRenderer component={component} />
       case 'stickyBar':
         return <StickyBarRenderer component={component} />
+      case 'quote':
+        return <QuoteRenderer component={component} />
       default:
         return null
   }
@@ -1364,6 +1366,107 @@ function StickyBarRenderer({ component }: { component: Extract<Component, { type
         >
           {data.buttonText}
         </button>
+      </div>
+    </div>
+  )
+}
+
+function QuoteRenderer({ component }: { component: Extract<Component, { type: 'quote' }> }) {
+  const { data } = component
+
+  const getQuoteStyle = () => {
+    switch (data.style) {
+      case 'quote':
+        return {
+          borderLeft: `${data.borderWidth} solid ${data.borderColor}`,
+          paddingLeft: '24px',
+          paddingRight: '24px',
+          paddingTop: '20px',
+          paddingBottom: '20px',
+        }
+      case 'highlight':
+        return {
+          backgroundColor: data.borderColor + '20',
+          border: `${data.borderWidth} solid ${data.borderColor}`,
+          borderRadius: '8px',
+          padding: '24px',
+        }
+      case 'callout':
+        return {
+          border: `${data.borderWidth} solid ${data.borderColor}`,
+          borderRadius: '8px',
+          padding: '24px',
+          position: 'relative' as const,
+        }
+      default:
+        return {}
+    }
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <div style={getQuoteStyle()}>
+          {data.style === 'callout' && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '-12px',
+                left: '24px',
+                backgroundColor: data.backgroundColor,
+                padding: '0 8px',
+                color: data.iconColor,
+                fontSize: '24px',
+              }}
+            >
+              💬
+            </div>
+          )}
+          {data.style === 'quote' && (
+            <div
+              style={{
+                fontSize: '48px',
+                color: data.iconColor,
+                lineHeight: '1',
+                marginBottom: '8px',
+              }}
+            >
+              "
+            </div>
+          )}
+          <p
+            style={{
+              fontSize: data.textSize.includes('px') ? data.textSize : `${data.textSize}px`,
+              fontWeight: data.textWeight,
+              color: data.textColor,
+              lineHeight: '1.6',
+              marginBottom: data.showAuthor ? '12px' : '0',
+              whiteSpace: 'pre-wrap',
+            }}
+          >
+            {data.text}
+          </p>
+          {data.showAuthor && (
+            <p
+              style={{
+                fontSize: '14px',
+                color: data.authorColor,
+                fontStyle: 'italic',
+                marginTop: '8px',
+              }}
+            >
+              {data.author}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent, QuoteComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -84,6 +84,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: '스티키 하단바',
     description: '화면 하단에 고정되는 구매 버튼 바',
     icon: '📌',
+  },
+  {
+    type: 'quote',
+    label: '인용구/강조',
+    description: '중요 문구를 강조하여 표시',
+    icon: '💬',
   },
 ]
 
@@ -327,4 +333,20 @@ export const DEFAULT_STICKY_BAR: StickyBarComponent['data'] = {
   buttonColor: '#ffffff',
   buttonBgColor: '#000000',
   buttonBorderRadius: '8px',
+}
+
+export const DEFAULT_QUOTE: QuoteComponent['data'] = {
+  backgroundColor: '#f9fafb',
+  height: 'auto',
+  style: 'quote',
+  text: '고객의 소리를 담은 인용문이나 중요한 메시지를 여기에 작성하세요.',
+  textSize: '20',
+  textWeight: '500',
+  textColor: '#333333',
+  showAuthor: true,
+  author: '- 고객명',
+  authorColor: '#666666',
+  borderColor: '#3b82f6',
+  borderWidth: '4px',
+  iconColor: '#3b82f6',
 }

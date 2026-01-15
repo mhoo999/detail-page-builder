@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review' | 'iconList' | 'stickyBar'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review' | 'iconList' | 'stickyBar' | 'quote'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -340,6 +340,27 @@ export interface StickyBarComponent {
   }
 }
 
+// Quote/Highlight Block Component
+export interface QuoteComponent {
+  id: string
+  type: 'quote'
+  data: {
+    backgroundColor: string
+    height?: string
+    style: 'quote' | 'highlight' | 'callout'
+    text: string
+    textSize: string
+    textWeight: '400' | '500' | '600' | '700'
+    textColor: string
+    showAuthor: boolean
+    author: string
+    authorColor: string
+    borderColor: string
+    borderWidth: string
+    iconColor: string
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -355,6 +376,7 @@ export type Component =
   | ReviewComponent
   | IconListComponent
   | StickyBarComponent
+  | QuoteComponent
 
 export interface ComponentTemplate {
   type: ComponentType
