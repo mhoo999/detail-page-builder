@@ -65,6 +65,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'beforeAfter' && (
         <BeforeAfterProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'countdown' && (
+        <CountdownProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -1312,6 +1315,120 @@ function BeforeAfterProperties({ component, updateData }: {
           label="슬라이더 색상"
           value={data.sliderColor}
           onChange={(v) => updateData('sliderColor', v)}
+        />
+      </Section>
+    </div>
+  )
+}
+
+function CountdownProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'countdown' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="타이머 설정">
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">종료 날짜/시간</label>
+          <input
+            type="datetime-local"
+            value={data.targetDate}
+            onChange={(e) => updateData('targetDate', e.target.value)}
+            className="w-full px-2 py-1 text-sm border border-black rounded-none focus:outline-none focus:ring-0"
+          />
+        </div>
+        <TextInput
+          label="종료 메시지"
+          value={data.expiredMessage}
+          onChange={(v) => updateData('expiredMessage', v)}
+        />
+      </Section>
+
+      <Section title="타이틀">
+        <Toggle
+          label="타이틀 표시"
+          value={data.showTitle}
+          onChange={(v) => updateData('showTitle', v)}
+        />
+        {data.showTitle && (
+          <>
+            <TextInput
+              label="타이틀 텍스트"
+              value={data.title}
+              onChange={(v) => updateData('title', v)}
+            />
+            <TextInput
+              label="크기"
+              value={data.titleSize.replace('px', '')}
+              onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="24"
+            />
+            <Select
+              label="굵기"
+              value={data.titleWeight}
+              onChange={(v) => updateData('titleWeight', v)}
+              options={[
+                { value: '400', label: 'Regular' },
+                { value: '500', label: 'Medium' },
+                { value: '600', label: 'SemiBold' },
+                { value: '700', label: 'Bold' },
+              ]}
+            />
+            <ColorInput
+              label="색상"
+              value={data.titleColor}
+              onChange={(v) => updateData('titleColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="숫자 스타일">
+        <TextInput
+          label="숫자 크기"
+          value={data.numberSize.replace('px', '')}
+          onChange={(v) => updateData('numberSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="48"
+        />
+        <ColorInput
+          label="숫자 색상"
+          value={data.numberColor}
+          onChange={(v) => updateData('numberColor', v)}
+        />
+        <ColorInput
+          label="숫자 배경색"
+          value={data.numberBgColor}
+          onChange={(v) => updateData('numberBgColor', v)}
+        />
+      </Section>
+
+      <Section title="라벨 스타일">
+        <TextInput
+          label="라벨 크기"
+          value={data.labelSize.replace('px', '')}
+          onChange={(v) => updateData('labelSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="14"
+        />
+        <ColorInput
+          label="라벨 색상"
+          value={data.labelColor}
+          onChange={(v) => updateData('labelColor', v)}
         />
       </Section>
     </div>

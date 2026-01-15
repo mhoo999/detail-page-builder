@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -60,6 +60,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: 'Before/After',
     description: '드래그하여 비교하는 이미지 슬라이더',
     icon: '⚖️',
+  },
+  {
+    type: 'countdown',
+    label: '카운트다운',
+    description: '세일 종료, 이벤트 마감 시간 표시',
+    icon: '⏰',
   },
 ]
 
@@ -228,4 +234,21 @@ export const DEFAULT_BEFORE_AFTER: BeforeAfterComponent['data'] = {
   labelBgColor: '#000000',
   sliderColor: '#ffffff',
   imageHeight: '400px',
+}
+
+export const DEFAULT_COUNTDOWN: CountdownComponent['data'] = {
+  backgroundColor: '#ef4444',
+  height: 'auto',
+  targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
+  showTitle: true,
+  title: '특가 세일 종료까지',
+  titleSize: '24',
+  titleWeight: '600',
+  titleColor: '#ffffff',
+  numberSize: '48',
+  numberColor: '#ef4444',
+  numberBgColor: '#ffffff',
+  labelSize: '14',
+  labelColor: '#ffffff',
+  expiredMessage: '이벤트가 종료되었습니다',
 }

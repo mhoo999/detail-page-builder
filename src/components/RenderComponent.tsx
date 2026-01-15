@@ -27,6 +27,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <CTARenderer component={component} />
       case 'beforeAfter':
         return <BeforeAfterRenderer component={component} />
+      case 'countdown':
+        return <CountdownRenderer component={component} />
       default:
         return null
   }
@@ -976,6 +978,126 @@ function BeforeAfterRenderer({ component }: { component: Extract<Component, { ty
             {data.afterLabel}
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function CountdownRenderer({ component }: { component: Extract<Component, { type: 'countdown' }> }) {
+  const { data } = component
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [isExpired, setIsExpired] = useState(false)
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const targetTime = new Date(data.targetDate).getTime()
+      const now = Date.now()
+      const difference = targetTime - now
+
+      if (difference <= 0) {
+        setIsExpired(true)
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 }
+      }
+
+      setIsExpired(false)
+      return {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((difference % (1000 * 60)) / 1000),
+      }
+    }
+
+    setTimeLeft(calculateTimeLeft())
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft())
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [data.targetDate])
+
+  const TimeBox = ({ value, label }: { value: number; label: string }) => (
+    <div style={{ textAlign: 'center' }}>
+      <div
+        style={{
+          backgroundColor: data.numberBgColor,
+          color: data.numberColor,
+          fontSize: data.numberSize.includes('px') ? data.numberSize : `${data.numberSize}px`,
+          fontWeight: '700',
+          padding: '16px 24px',
+          borderRadius: '8px',
+          minWidth: '80px',
+        }}
+      >
+        {String(value).padStart(2, '0')}
+      </div>
+      <div
+        style={{
+          color: data.labelColor,
+          fontSize: data.labelSize.includes('px') ? data.labelSize : `${data.labelSize}px`,
+          marginTop: '8px',
+          fontWeight: '500',
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  )
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div
+        style={{
+          maxWidth: '1140px',
+          margin: '0 auto',
+          textAlign: 'center',
+        }}
+      >
+        {data.showTitle && !isExpired && (
+          <h2
+            style={{
+              fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+              fontWeight: data.titleWeight,
+              color: data.titleColor,
+              marginBottom: '24px',
+            }}
+          >
+            {data.title}
+          </h2>
+        )}
+        {isExpired ? (
+          <div
+            style={{
+              fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+              fontWeight: data.titleWeight,
+              color: data.titleColor,
+            }}
+          >
+            {data.expiredMessage}
+          </div>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '16px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <TimeBox value={timeLeft.days} label="일" />
+            <TimeBox value={timeLeft.hours} label="시간" />
+            <TimeBox value={timeLeft.minutes} label="분" />
+            <TimeBox value={timeLeft.seconds} label="초" />
+          </div>
+        )}
       </div>
     </div>
   )

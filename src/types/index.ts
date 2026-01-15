@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -245,6 +245,28 @@ export interface BeforeAfterComponent {
   }
 }
 
+// Countdown Timer Component
+export interface CountdownComponent {
+  id: string
+  type: 'countdown'
+  data: {
+    backgroundColor: string
+    height?: string
+    targetDate: string
+    showTitle: boolean
+    title: string
+    titleSize: string
+    titleWeight: '400' | '500' | '600' | '700'
+    titleColor: string
+    numberSize: string
+    numberColor: string
+    numberBgColor: string
+    labelSize: string
+    labelColor: string
+    expiredMessage: string
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -256,6 +278,7 @@ export type Component =
   | TabsComponent
   | CTAComponent
   | BeforeAfterComponent
+  | CountdownComponent
 
 export interface ComponentTemplate {
   type: ComponentType
