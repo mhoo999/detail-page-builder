@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review' | 'iconList'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review' | 'iconList' | 'stickyBar'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -319,6 +319,27 @@ export interface IconListComponent {
   }
 }
 
+// Sticky Bottom Bar Component
+export interface StickyBarComponent {
+  id: string
+  type: 'stickyBar'
+  data: {
+    backgroundColor: string
+    height: string
+    showPrice: boolean
+    priceLabel: string
+    price: string
+    priceSize: string
+    priceColor: string
+    buttonText: string
+    buttonSize: string
+    buttonWeight: '400' | '500' | '600' | '700'
+    buttonColor: string
+    buttonBgColor: string
+    buttonBorderRadius: string
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -333,6 +354,7 @@ export type Component =
   | CountdownComponent
   | ReviewComponent
   | IconListComponent
+  | StickyBarComponent
 
 export interface ComponentTemplate {
   type: ComponentType

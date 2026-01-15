@@ -33,6 +33,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <ReviewRenderer component={component} />
       case 'iconList':
         return <IconListRenderer component={component} />
+      case 'stickyBar':
+        return <StickyBarRenderer component={component} />
       default:
         return null
   }
@@ -1301,6 +1303,67 @@ function IconListRenderer({ component }: { component: Extract<Component, { type:
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function StickyBarRenderer({ component }: { component: Extract<Component, { type: 'stickyBar' }> }) {
+  const { data } = component
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        height: data.height,
+        borderTop: '1px solid #e5e7eb',
+        boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+      }}
+      className="cursor-pointer"
+    >
+      <div
+        style={{
+          maxWidth: '1140px',
+          margin: '0 auto',
+          height: '100%',
+          padding: '0 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        {data.showPrice && (
+          <div>
+            <span style={{ fontSize: '14px', color: '#666', marginRight: '8px' }}>
+              {data.priceLabel}
+            </span>
+            <span
+              style={{
+                fontSize: data.priceSize.includes('px') ? data.priceSize : `${data.priceSize}px`,
+                fontWeight: '700',
+                color: data.priceColor,
+              }}
+            >
+              {data.price}
+            </span>
+          </div>
+        )}
+        <button
+          style={{
+            backgroundColor: data.buttonBgColor,
+            color: data.buttonColor,
+            fontSize: data.buttonSize.includes('px') ? data.buttonSize : `${data.buttonSize}px`,
+            fontWeight: data.buttonWeight,
+            padding: '12px 32px',
+            borderRadius: data.buttonBorderRadius,
+            border: 'none',
+            cursor: 'pointer',
+            marginLeft: data.showPrice ? '0' : 'auto',
+          }}
+        >
+          {data.buttonText}
+        </button>
       </div>
     </div>
   )

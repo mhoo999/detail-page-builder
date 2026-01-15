@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -78,6 +78,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: '아이콘 리스트',
     description: '아이콘과 텍스트로 특징 나열',
     icon: '✓',
+  },
+  {
+    type: 'stickyBar',
+    label: '스티키 하단바',
+    description: '화면 하단에 고정되는 구매 버튼 바',
+    icon: '📌',
   },
 ]
 
@@ -305,4 +311,20 @@ export const DEFAULT_ICON_LIST: IconListComponent['data'] = {
     { id: 'icon3', icon: '✓', text: '1년 품질 보증' },
     { id: 'icon4', icon: '✓', text: '24시간 고객 지원' },
   ],
+}
+
+export const DEFAULT_STICKY_BAR: StickyBarComponent['data'] = {
+  backgroundColor: '#ffffff',
+  height: '70px',
+  showPrice: true,
+  priceLabel: '판매가',
+  price: '29,900원',
+  priceSize: '24',
+  priceColor: '#ef4444',
+  buttonText: '구매하기',
+  buttonSize: '16',
+  buttonWeight: '600',
+  buttonColor: '#ffffff',
+  buttonBgColor: '#000000',
+  buttonBorderRadius: '8px',
 }

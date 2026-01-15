@@ -74,6 +74,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'iconList' && (
         <IconListProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'stickyBar' && (
+        <StickyBarProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -1762,6 +1765,105 @@ function IconListProperties({ component, updateData }: {
         >
           + 항목 추가
         </button>
+      </Section>
+    </div>
+  )
+}
+
+function StickyBarProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'stickyBar' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height}
+          onChange={(v) => updateData('height', v)}
+          placeholder="70px"
+        />
+      </Section>
+
+      <Section title="가격">
+        <Toggle
+          label="가격 표시"
+          value={data.showPrice}
+          onChange={(v) => updateData('showPrice', v)}
+        />
+        {data.showPrice && (
+          <>
+            <TextInput
+              label="가격 라벨"
+              value={data.priceLabel}
+              onChange={(v) => updateData('priceLabel', v)}
+            />
+            <TextInput
+              label="가격"
+              value={data.price}
+              onChange={(v) => updateData('price', v)}
+            />
+            <TextInput
+              label="가격 크기"
+              value={data.priceSize.replace('px', '')}
+              onChange={(v) => updateData('priceSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="24"
+            />
+            <ColorInput
+              label="가격 색상"
+              value={data.priceColor}
+              onChange={(v) => updateData('priceColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="버튼">
+        <TextInput
+          label="버튼 텍스트"
+          value={data.buttonText}
+          onChange={(v) => updateData('buttonText', v)}
+        />
+        <TextInput
+          label="크기"
+          value={data.buttonSize.replace('px', '')}
+          onChange={(v) => updateData('buttonSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="16"
+        />
+        <Select
+          label="굵기"
+          value={data.buttonWeight}
+          onChange={(v) => updateData('buttonWeight', v)}
+          options={[
+            { value: '400', label: 'Regular' },
+            { value: '500', label: 'Medium' },
+            { value: '600', label: 'SemiBold' },
+            { value: '700', label: 'Bold' },
+          ]}
+        />
+        <ColorInput
+          label="텍스트 색상"
+          value={data.buttonColor}
+          onChange={(v) => updateData('buttonColor', v)}
+        />
+        <ColorInput
+          label="배경색"
+          value={data.buttonBgColor}
+          onChange={(v) => updateData('buttonBgColor', v)}
+        />
+        <TextInput
+          label="모서리 둥글기"
+          value={data.buttonBorderRadius}
+          onChange={(v) => updateData('buttonBorderRadius', v)}
+          placeholder="8px"
+        />
       </Section>
     </div>
   )
