@@ -155,6 +155,15 @@ function SliderRenderer({ component }: { component: Extract<Component, { type: '
   const { data } = component
   const [currentIndex, setCurrentIndex] = useState(0)
 
+  // 이미지 배열이 변경될 때 currentIndex 조정
+  useEffect(() => {
+    if (data.images.length > 0 && currentIndex >= data.images.length) {
+      setCurrentIndex(data.images.length - 1)
+    } else if (data.images.length === 0) {
+      setCurrentIndex(0)
+    }
+  }, [data.images.length, currentIndex])
+
   useEffect(() => {
     if (data.autoPlay && data.images.length > 1) {
       const timer = setInterval(() => {
@@ -213,13 +222,16 @@ function SliderRenderer({ component }: { component: Extract<Component, { type: '
                 left: '20px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                backgroundColor: 'rgba(0,0,0,0.5)',
+                backgroundColor: 'transparent',
                 color: 'white',
                 border: 'none',
-                padding: '10px 15px',
-                borderRadius: '50%',
+                padding: '15px 20px',
                 cursor: 'pointer',
-                fontSize: '20px',
+                fontSize: '48px',
+                fontWeight: 'bold',
+                lineHeight: '1',
+                textShadow: '0 2px 8px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.5)',
+                zIndex: 10,
               }}
             >
               ‹
@@ -234,13 +246,16 @@ function SliderRenderer({ component }: { component: Extract<Component, { type: '
                 right: '20px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                backgroundColor: 'rgba(0,0,0,0.5)',
+                backgroundColor: 'transparent',
                 color: 'white',
                 border: 'none',
-                padding: '10px 15px',
-                borderRadius: '50%',
+                padding: '15px 20px',
                 cursor: 'pointer',
-                fontSize: '20px',
+                fontSize: '48px',
+                fontWeight: 'bold',
+                lineHeight: '1',
+                textShadow: '0 2px 8px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.5)',
+                zIndex: 10,
               }}
             >
               ›
@@ -495,7 +510,7 @@ function TableRenderer({ component }: { component: Extract<Component, { type: 't
                     backgroundColor: data.headerBackgroundColor,
                     color: data.headerTextColor,
                     padding: '12px',
-                    textAlign: 'left',
+                    textAlign: column.textAlign || 'left',
                     border: `${data.borderWidth} solid ${data.borderColor}`,
                     fontWeight: '600',
                     ...(column.width && column.width !== 'auto' ? { width: column.width } : {}),
@@ -509,20 +524,24 @@ function TableRenderer({ component }: { component: Extract<Component, { type: 't
           <tbody>
             {data.rows.map((row) => (
               <tr key={row.id}>
-                {row.cells.map((cell, cellIndex) => (
-                  <td
-                    key={cellIndex}
-                    style={{
-                      backgroundColor: data.cellBackgroundColor,
-                      color: data.cellTextColor,
-                      padding: '12px',
-                      border: `${data.borderWidth} solid ${data.borderColor}`,
-                      whiteSpace: 'pre-wrap',
-                    }}
-                  >
-                    {cell}
-                  </td>
-                ))}
+                {row.cells.map((cell, cellIndex) => {
+                  const column = data.columns[cellIndex]
+                  return (
+                    <td
+                      key={cellIndex}
+                      style={{
+                        backgroundColor: data.cellBackgroundColor,
+                        color: data.cellTextColor,
+                        padding: '12px',
+                        border: `${data.borderWidth} solid ${data.borderColor}`,
+                        whiteSpace: 'pre-wrap',
+                        textAlign: column?.textAlign || 'left',
+                      }}
+                    >
+                      {cell}
+                    </td>
+                  )
+                })}
               </tr>
             ))}
           </tbody>

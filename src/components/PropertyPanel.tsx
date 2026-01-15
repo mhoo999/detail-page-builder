@@ -631,7 +631,7 @@ function TableProperties({ component, updateData, onUpdateComponent }: {
   const { data } = component
 
   const addColumn = () => {
-    const newColumn = { id: `col-${Date.now()}`, label: '새 컬럼', width: 'auto' }
+    const newColumn = { id: `col-${Date.now()}`, label: '새 컬럼', width: 'auto', textAlign: 'left' }
     const newColumns = [...data.columns, newColumn]
     const newRows = data.rows.map(row => ({
       ...row,
@@ -766,6 +766,17 @@ function TableProperties({ component, updateData, onUpdateComponent }: {
               value={column.width || 'auto'}
               onChange={(v) => updateColumn(index, 'width', v)}
               placeholder="auto"
+            />
+            <Select
+              label="텍스트 정렬"
+              value={column.textAlign || 'left'}
+              onChange={(v) => updateColumn(index, 'textAlign', v)}
+              options={[
+                { value: 'left', label: '왼쪽' },
+                { value: 'center', label: '가운데' },
+                { value: 'right', label: '오른쪽' },
+                { value: 'justify', label: '양쪽 정렬' },
+              ]}
             />
           </div>
         ))}

@@ -97,7 +97,7 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
           }
           savePagesToStorage(pages)
           if (!silent) {
-            alert('페이지가 업데이트되었습니다!')
+            alert('페이지가 저장되었습니다!')
           }
         }
       } else {
@@ -293,7 +293,7 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
               disabled={isSaving}
               className="px-4 py-2 bg-black text-white rounded-none hover:bg-gray-800 border border-black disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              {isSaving ? '저장 중...' : currentPageId ? '업데이트' : '저장'}
+              {isSaving ? '저장 중...' : '저장'}
             </button>
             <button
               onClick={handleExportHTML}
@@ -455,10 +455,114 @@ function generateHeroHTML(comp: Extract<Component, { type: 'hero' }>): string {
 
 function generateSliderHTML(comp: Extract<Component, { type: 'slider' }>): string {
   const { data } = comp
+  
+  // 고유한 슬라이더 ID 생성
+  const sliderId = `slider-${Math.random().toString(36).substr(2, 9)}`
+  
+  const imagesHTML = data.images.map((img, i) => 
+    `<img src="${img}" alt="Slide ${i + 1}" class="slider-image-${sliderId}" data-index="${i}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: ${i === 0 ? 1 : 0}; transition: opacity 0.5s ease-in-out;">`
+  ).join('\n    ')
+  
+  const prevButton = data.images.length > 1 ? `
+    <button class="slider-prev-${sliderId}" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background-color: transparent; color: white; border: none; padding: 15px 20px; cursor: pointer; font-size: 48px; font-weight: bold; line-height: 1; text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.5); z-index: 10;">‹</button>
+  ` : ''
+  
+  const nextButton = data.images.length > 1 ? `
+    <button class="slider-next-${sliderId}" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background-color: transparent; color: white; border: none; padding: 15px 20px; cursor: pointer; font-size: 48px; font-weight: bold; line-height: 1; text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 0 4px rgba(0,0,0,0.5); z-index: 10;">›</button>
+  ` : ''
+  
+  const indicators = data.showIndicators && data.images.length > 1 ? `
+    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
+      ${data.images.map((_, i) => `<div class="slider-indicator-${sliderId}" data-index="${i}" style="width: 10px; height: 10px; border-radius: 50%; background-color: ${i === 0 ? 'white' : 'rgba(255,255,255,0.5)'}; cursor: pointer;"></div>`).join('\n      ')}
+    </div>
+  ` : ''
+  
+  // 각 슬라이더마다 독립적인 JavaScript 코드 생성
+  const script = `
+    <script>
+      (function() {
+        let currentIndex = 0;
+        const slider = document.getElementById('${sliderId}');
+        if (!slider) return;
+        
+        const images = slider.querySelectorAll('.slider-image-${sliderId}');
+        const indicators = slider.querySelectorAll('.slider-indicator-${sliderId}');
+        const prevBtn = slider.querySelector('.slider-prev-${sliderId}');
+        const nextBtn = slider.querySelector('.slider-next-${sliderId}');
+        
+        if (images.length === 0) return;
+        
+        function updateSlider(index) {
+          images.forEach((img, i) => {
+            img.style.opacity = i === index ? '1' : '0';
+          });
+          indicators.forEach((ind, i) => {
+            ind.style.backgroundColor = i === index ? 'white' : 'rgba(255,255,255,0.5)';
+          });
+          currentIndex = index;
+        }
+        
+        function changeSlide(direction) {
+          const newIndex = (currentIndex + direction + images.length) % images.length;
+          updateSlider(newIndex);
+        }
+        
+        function goToSlide(index) {
+          updateSlider(index);
+        }
+        
+        // 버튼 이벤트 리스너
+        if (prevBtn) {
+          prevBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            changeSlide(-1);
+          });
+        }
+        
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            changeSlide(1);
+          });
+        }
+        
+        // 인디케이터 이벤트 리스너
+        indicators.forEach((ind, index) => {
+          ind.addEventListener('click', function(e) {
+            e.stopPropagation();
+            goToSlide(index);
+          });
+        });
+        
+        // 자동 재생
+        ${data.autoPlay && data.images.length > 1 ? `
+        let autoPlayInterval = setInterval(function() {
+          changeSlide(1);
+        }, ${data.interval});
+        
+        // 마우스 호버 시 자동 재생 일시 정지
+        slider.addEventListener('mouseenter', function() {
+          clearInterval(autoPlayInterval);
+        });
+        
+        slider.addEventListener('mouseleave', function() {
+          autoPlayInterval = setInterval(function() {
+            changeSlide(1);
+          }, ${data.interval});
+        });
+        ` : ''}
+      })();
+    </script>
+  `
+  
   return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
-  <div style="max-width: ${data.imageWidth}; margin: 0 auto; height: ${data.height}; position: relative; overflow: hidden; border-radius: 8px;">
-    ${data.images.map((img, i) => `<img src="${img}" alt="Slide ${i + 1}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: ${i === 0 ? 1 : 0};">`).join('\n    ')}
+  <div id="${sliderId}" style="max-width: ${data.imageWidth}; margin: 0 auto; height: ${data.height}; position: relative; overflow: hidden; border-radius: 8px;">
+    ${imagesHTML}
+    ${prevButton}
+    ${nextButton}
+    ${indicators}
   </div>
+  ${script}
 </div>`
 }
 
@@ -532,12 +636,15 @@ function generateTableHTML(comp: Extract<Component, { type: 'table' }>): string 
   
   const headerCells = data.columns.map(col => {
     const widthStyle = col.width && col.width !== 'auto' ? `width: ${col.width};` : ''
-    return `<th style="background-color: ${data.headerBackgroundColor}; color: ${data.headerTextColor}; padding: 12px; text-align: left; border: ${data.borderWidth} solid ${data.borderColor}; font-weight: 600; ${widthStyle}">${col.label}</th>`
+    const textAlign = col.textAlign || 'left'
+    return `<th style="background-color: ${data.headerBackgroundColor}; color: ${data.headerTextColor}; padding: 12px; text-align: ${textAlign}; border: ${data.borderWidth} solid ${data.borderColor}; font-weight: 600; ${widthStyle}">${col.label}</th>`
   }).join('\n      ')
   
   const rows = data.rows.map(row => {
-    const cells = row.cells.map((cell) => {
-      return `<td style="background-color: ${data.cellBackgroundColor}; color: ${data.cellTextColor}; padding: 12px; border: ${data.borderWidth} solid ${data.borderColor}; white-space: pre-wrap;">${cell}</td>`
+    const cells = row.cells.map((cell, cellIndex) => {
+      const column = data.columns[cellIndex]
+      const textAlign = column?.textAlign || 'left'
+      return `<td style="background-color: ${data.cellBackgroundColor}; color: ${data.cellTextColor}; padding: 12px; border: ${data.borderWidth} solid ${data.borderColor}; white-space: pre-wrap; text-align: ${textAlign};">${cell}</td>`
     }).join('\n        ')
     return `<tr>
         ${cells}

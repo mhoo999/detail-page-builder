@@ -126,8 +126,8 @@ export const DEFAULT_TABLE: TableComponent['data'] = {
   borderWidth: '1px',
   height: 'auto',
   columns: [
-    { id: 'col1', label: '항목', width: '200px' },
-    { id: 'col2', label: '내용', width: 'auto' },
+    { id: 'col1', label: '항목', width: '200px', textAlign: 'left' },
+    { id: 'col2', label: '내용', width: 'auto', textAlign: 'left' },
   ],
   rows: [
     { id: 'row1', cells: ['항목 1', '내용 1'] },

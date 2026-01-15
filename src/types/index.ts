@@ -144,6 +144,7 @@ export interface TableComponent {
       id: string
       label: string
       width?: string
+      textAlign?: 'left' | 'center' | 'right' | 'justify'
     }[]
     rows: {
       id: string
