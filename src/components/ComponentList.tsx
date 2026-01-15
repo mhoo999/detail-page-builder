@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA } from '../constants/componentTemplates'
-import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -82,6 +82,13 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
           type: 'cta',
           data: { ...DEFAULT_CTA },
         } as CTAComponent
+        break
+      case 'beforeAfter':
+        newComponent = {
+          id: `beforeAfter-${Date.now()}`,
+          type: 'beforeAfter',
+          data: { ...DEFAULT_BEFORE_AFTER },
+        } as BeforeAfterComponent
         break
       default:
         return

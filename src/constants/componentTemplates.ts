@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -54,6 +54,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: 'CTA 버튼',
     description: '구매하기, 문의하기 등 주요 액션 버튼',
     icon: '🔘',
+  },
+  {
+    type: 'beforeAfter',
+    label: 'Before/After',
+    description: '드래그하여 비교하는 이미지 슬라이더',
+    icon: '⚖️',
   },
 ]
 
@@ -209,4 +215,17 @@ export const DEFAULT_CTA: CTAComponent['data'] = {
   buttonBgColor: '#ffffff',
   buttonBorderRadius: '8px',
   buttonWidth: '200px',
+}
+
+export const DEFAULT_BEFORE_AFTER: BeforeAfterComponent['data'] = {
+  backgroundColor: '#ffffff',
+  height: 'auto',
+  beforeImage: 'https://via.placeholder.com/600x400/ef4444/ffffff?text=Before',
+  afterImage: 'https://via.placeholder.com/600x400/22c55e/ffffff?text=After',
+  beforeLabel: 'Before',
+  afterLabel: 'After',
+  labelColor: '#ffffff',
+  labelBgColor: '#000000',
+  sliderColor: '#ffffff',
+  imageHeight: '400px',
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Component } from '../types'
 
 interface RenderComponentProps {
@@ -25,6 +25,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <TabsRenderer component={component} />
       case 'cta':
         return <CTARenderer component={component} />
+      case 'beforeAfter':
+        return <BeforeAfterRenderer component={component} />
       default:
         return null
   }
@@ -803,6 +805,177 @@ function CTARenderer({ component }: { component: Extract<Component, { type: 'cta
         >
           {data.buttonText}
         </button>
+      </div>
+    </div>
+  )
+}
+
+function BeforeAfterRenderer({ component }: { component: Extract<Component, { type: 'beforeAfter' }> }) {
+  const { data } = component
+  const [sliderPosition, setSliderPosition] = useState(50)
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const isDragging = React.useRef(false)
+
+  const handleMove = (clientX: number) => {
+    if (!containerRef.current || !isDragging.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const x = clientX - rect.left
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
+    setSliderPosition(percentage)
+  }
+
+  const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation()
+    isDragging.current = true
+  }
+
+  const handleMouseUp = () => {
+    isDragging.current = false
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    handleMove(e.clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    handleMove(e.touches[0].clientX)
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <div
+          ref={containerRef}
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: data.imageHeight,
+            overflow: 'hidden',
+            borderRadius: '8px',
+            userSelect: 'none',
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleMouseUp}
+        >
+          {/* After Image (Background) */}
+          <img
+            src={data.afterImage}
+            alt="After"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+
+          {/* Before Image (Clipped) */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: `${sliderPosition}%`,
+              height: '100%',
+              overflow: 'hidden',
+            }}
+          >
+            <img
+              src={data.beforeImage}
+              alt="Before"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: containerRef.current ? `${containerRef.current.offsetWidth}px` : '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+
+          {/* Slider Line */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: `${sliderPosition}%`,
+              transform: 'translateX(-50%)',
+              width: '4px',
+              height: '100%',
+              backgroundColor: data.sliderColor,
+              cursor: 'ew-resize',
+              zIndex: 10,
+            }}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleMouseDown}
+          >
+            {/* Slider Handle */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '40px',
+                height: '40px',
+                backgroundColor: data.sliderColor,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              }}
+            >
+              <span style={{ color: '#333', fontSize: '16px' }}>◀▶</span>
+            </div>
+          </div>
+
+          {/* Labels */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '16px',
+              left: '16px',
+              backgroundColor: data.labelBgColor,
+              color: data.labelColor,
+              padding: '8px 16px',
+              borderRadius: '4px',
+              fontSize: '14px',
+              fontWeight: '600',
+            }}
+          >
+            {data.beforeLabel}
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              top: '16px',
+              right: '16px',
+              backgroundColor: data.labelBgColor,
+              color: data.labelColor,
+              padding: '8px 16px',
+              borderRadius: '4px',
+              fontSize: '14px',
+              fontWeight: '600',
+            }}
+          >
+            {data.afterLabel}
+          </div>
+        </div>
       </div>
     </div>
   )

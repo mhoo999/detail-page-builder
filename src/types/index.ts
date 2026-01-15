@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -227,6 +227,24 @@ export interface CTAComponent {
   }
 }
 
+// Before/After Comparison Component
+export interface BeforeAfterComponent {
+  id: string
+  type: 'beforeAfter'
+  data: {
+    backgroundColor: string
+    height?: string
+    beforeImage: string
+    afterImage: string
+    beforeLabel: string
+    afterLabel: string
+    labelColor: string
+    labelBgColor: string
+    sliderColor: string
+    imageHeight: string
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -237,6 +255,7 @@ export type Component =
   | FAQComponent
   | TabsComponent
   | CTAComponent
+  | BeforeAfterComponent
 
 export interface ComponentTemplate {
   type: ComponentType

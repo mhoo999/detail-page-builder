@@ -62,6 +62,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'cta' && (
         <CTAProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'beforeAfter' && (
+        <BeforeAfterProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -1232,6 +1235,83 @@ function CTAProperties({ component, updateData }: {
           value={data.buttonWidth}
           onChange={(v) => updateData('buttonWidth', v)}
           placeholder="200px"
+        />
+      </Section>
+    </div>
+  )
+}
+
+function BeforeAfterProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'beforeAfter' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="이미지">
+        <ImageInput
+          label="Before 이미지"
+          value={data.beforeImage}
+          onChange={(v) => updateData('beforeImage', v)}
+          placeholder="https://... 또는 파일 선택"
+        />
+        <ImageInput
+          label="After 이미지"
+          value={data.afterImage}
+          onChange={(v) => updateData('afterImage', v)}
+          placeholder="https://... 또는 파일 선택"
+        />
+        <TextInput
+          label="이미지 높이"
+          value={data.imageHeight}
+          onChange={(v) => updateData('imageHeight', v)}
+          placeholder="400px"
+        />
+      </Section>
+
+      <Section title="라벨">
+        <TextInput
+          label="Before 라벨"
+          value={data.beforeLabel}
+          onChange={(v) => updateData('beforeLabel', v)}
+        />
+        <TextInput
+          label="After 라벨"
+          value={data.afterLabel}
+          onChange={(v) => updateData('afterLabel', v)}
+        />
+        <ColorInput
+          label="라벨 텍스트 색상"
+          value={data.labelColor}
+          onChange={(v) => updateData('labelColor', v)}
+        />
+        <ColorInput
+          label="라벨 배경색"
+          value={data.labelBgColor}
+          onChange={(v) => updateData('labelBgColor', v)}
+        />
+      </Section>
+
+      <Section title="슬라이더">
+        <ColorInput
+          label="슬라이더 색상"
+          value={data.sliderColor}
+          onChange={(v) => updateData('sliderColor', v)}
         />
       </Section>
     </div>
