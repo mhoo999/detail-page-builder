@@ -21,6 +21,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <TableRenderer component={component} />
       case 'faq':
         return <FAQRenderer component={component} />
+      case 'tabs':
+        return <TabsRenderer component={component} />
       default:
         return null
   }
@@ -649,6 +651,79 @@ function FAQRenderer({ component }: { component: Extract<Component, { type: 'faq
               </div>
             )
           })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TabsRenderer({ component }: { component: Extract<Component, { type: 'tabs' }> }) {
+  const { data } = component
+  const [activeTab, setActiveTab] = useState(data.items[0]?.id || '')
+
+  useEffect(() => {
+    if (data.items.length > 0 && !data.items.find(item => item.id === activeTab)) {
+      setActiveTab(data.items[0].id)
+    }
+  }, [data.items, activeTab])
+
+  const activeItem = data.items.find(item => item.id === activeTab)
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <div
+          style={{
+            display: 'flex',
+            borderBottom: `2px solid ${data.borderColor}`,
+          }}
+        >
+          {data.items.map((item) => {
+            const isActive = item.id === activeTab
+            return (
+              <button
+                key={item.id}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setActiveTab(item.id)
+                }}
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: isActive ? data.tabActiveColor : data.tabBgColor,
+                  color: isActive ? data.tabActiveTextColor : data.tabTextColor,
+                  border: 'none',
+                  borderBottom: isActive ? `2px solid ${data.tabActiveColor}` : '2px solid transparent',
+                  marginBottom: '-2px',
+                  cursor: 'pointer',
+                  fontWeight: isActive ? '600' : '400',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {item.label}
+              </button>
+            )
+          })}
+        </div>
+        <div
+          style={{
+            backgroundColor: data.contentBgColor,
+            color: data.contentTextColor,
+            padding: '24px',
+            border: `1px solid ${data.borderColor}`,
+            borderTop: 'none',
+            lineHeight: '1.6',
+            whiteSpace: 'pre-wrap',
+          }}
+        >
+          {activeItem?.content || ''}
         </div>
       </div>
     </div>

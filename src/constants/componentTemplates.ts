@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -42,6 +42,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: 'FAQ/아코디언',
     description: '자주 묻는 질문을 접었다 펼 수 있는 형태',
     icon: '❓',
+  },
+  {
+    type: 'tabs',
+    label: '탭',
+    description: '여러 정보를 탭으로 구분하여 표시',
+    icon: '📑',
   },
 ]
 
@@ -158,5 +164,22 @@ export const DEFAULT_FAQ: FAQComponent['data'] = {
   items: [
     { id: 'faq1', question: '질문 1을 입력하세요', answer: '답변 1을 입력하세요' },
     { id: 'faq2', question: '질문 2를 입력하세요', answer: '답변 2를 입력하세요' },
+  ],
+}
+
+export const DEFAULT_TABS: TabsComponent['data'] = {
+  backgroundColor: '#ffffff',
+  height: 'auto',
+  tabBgColor: '#f3f4f6',
+  tabActiveColor: '#000000',
+  tabTextColor: '#666666',
+  tabActiveTextColor: '#ffffff',
+  contentBgColor: '#ffffff',
+  contentTextColor: '#333333',
+  borderColor: '#e5e7eb',
+  items: [
+    { id: 'tab1', label: '상세정보', content: '상세정보 내용을 입력하세요' },
+    { id: 'tab2', label: '리뷰', content: '리뷰 내용을 입력하세요' },
+    { id: 'tab3', label: '배송안내', content: '배송안내 내용을 입력하세요' },
   ],
 }

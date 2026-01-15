@@ -11,7 +11,8 @@
       "Bash(timeout 5 tail:*)",
       "Bash(timeout:*)",
       "Bash(ping:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git push:*)"
     ]
   }
 }

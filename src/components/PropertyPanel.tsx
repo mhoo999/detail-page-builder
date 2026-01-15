@@ -56,6 +56,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'faq' && (
         <FAQProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'tabs' && (
+        <TabsProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -968,6 +971,125 @@ function FAQProperties({ component, updateData }: {
           className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
         >
           + 항목 추가
+        </button>
+      </Section>
+    </div>
+  )
+}
+
+function TabsProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'tabs' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addItem = () => {
+    updateData('items', [
+      ...data.items,
+      { id: `tab-${Date.now()}`, label: '새 탭', content: '내용을 입력하세요' },
+    ])
+  }
+
+  const updateItem = (index: number, field: string, value: string) => {
+    const newItems = [...data.items]
+    newItems[index] = { ...newItems[index], [field]: value }
+    updateData('items', newItems)
+  }
+
+  const removeItem = (index: number) => {
+    if (data.items.length <= 1) {
+      alert('최소 1개의 탭이 필요합니다.')
+      return
+    }
+    updateData('items', data.items.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="탭 스타일">
+        <ColorInput
+          label="탭 배경색"
+          value={data.tabBgColor}
+          onChange={(v) => updateData('tabBgColor', v)}
+        />
+        <ColorInput
+          label="탭 텍스트 색상"
+          value={data.tabTextColor}
+          onChange={(v) => updateData('tabTextColor', v)}
+        />
+        <ColorInput
+          label="활성 탭 배경색"
+          value={data.tabActiveColor}
+          onChange={(v) => updateData('tabActiveColor', v)}
+        />
+        <ColorInput
+          label="활성 탭 텍스트 색상"
+          value={data.tabActiveTextColor}
+          onChange={(v) => updateData('tabActiveTextColor', v)}
+        />
+      </Section>
+
+      <Section title="컨텐츠 스타일">
+        <ColorInput
+          label="컨텐츠 배경색"
+          value={data.contentBgColor}
+          onChange={(v) => updateData('contentBgColor', v)}
+        />
+        <ColorInput
+          label="컨텐츠 텍스트 색상"
+          value={data.contentTextColor}
+          onChange={(v) => updateData('contentTextColor', v)}
+        />
+        <ColorInput
+          label="테두리 색상"
+          value={data.borderColor}
+          onChange={(v) => updateData('borderColor', v)}
+        />
+      </Section>
+
+      <Section title="탭 항목">
+        {data.items.map((item, index) => (
+          <div key={item.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">탭 {index + 1}</span>
+              <button
+                onClick={() => removeItem(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <TextInput
+              label="탭 이름"
+              value={item.label}
+              onChange={(v) => updateItem(index, 'label', v)}
+            />
+            <TextArea
+              label="내용"
+              value={item.content}
+              onChange={(v) => updateItem(index, 'content', v)}
+            />
+          </div>
+        ))}
+        <button
+          onClick={addItem}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 탭 추가
         </button>
       </Section>
     </div>
