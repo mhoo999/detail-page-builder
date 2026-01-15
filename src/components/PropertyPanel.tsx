@@ -74,11 +74,11 @@ function HeroProperties({ component, updateData }: {
           onChange={(v) => updateData('showOverlayImage', v)}
         />
         {data.showOverlayImage && (
-          <TextInput
+          <ImageInput
             label="이미지 URL"
             value={data.overlayImage}
             onChange={(v) => updateData('overlayImage', v)}
-            placeholder="https://..."
+            placeholder="https://... 또는 파일 선택"
           />
         )}
       </Section>
@@ -216,11 +216,11 @@ function HeroProperties({ component, updateData }: {
           onChange={(v) => updateData('showDescriptionImage', v)}
         />
         {data.showDescriptionImage && (
-          <TextInput
+          <ImageInput
             label="이미지 URL"
             value={data.descriptionImage}
             onChange={(v) => updateData('descriptionImage', v)}
-            placeholder="https://..."
+            placeholder="https://... 또는 파일 선택"
           />
         )}
       </Section>
@@ -335,17 +335,16 @@ function SliderProperties({ component, updateData }: {
 
       <Section title="이미지">
         {data.images.map((image, index) => (
-          <div key={index} className="flex gap-2 mb-2">
-            <input
-              type="text"
+          <div key={index} className="mb-2">
+            <ImageInput
+              label={`이미지 ${index + 1}`}
               value={image}
-              onChange={(e) => updateImage(index, e.target.value)}
-              className="flex-1 px-2 py-1 text-sm border border-black rounded-none"
-              placeholder="이미지 URL"
+              onChange={(v) => updateImage(index, v)}
+              placeholder="https://... 또는 파일 선택"
             />
             <button
               onClick={() => removeImage(index)}
-              className="px-2 py-1 text-sm bg-white text-black border border-black hover:bg-gray-100"
+              className="mt-1 w-full px-2 py-1 text-sm bg-white text-black border border-black hover:bg-gray-100"
             >
               삭제
             </button>
@@ -591,10 +590,11 @@ function GridProperties({ component, updateData }: {
                 삭제
               </button>
             </div>
-            <TextInput
+            <ImageInput
               label="아이콘 URL"
               value={item.image}
               onChange={(v) => updateItem(index, 'image', v)}
+              placeholder="https://... 또는 파일 선택"
             />
             <TextInput
               label="제목"
@@ -805,6 +805,50 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     <div className="border-b border-black pb-4">
       <h3 className="text-sm font-semibold text-black mb-3">{title}</h3>
       <div className="space-y-3">{children}</div>
+    </div>
+  )
+}
+
+function ImageInput({ label, value, onChange, placeholder }: {
+  label: string
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+}) {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        onChange(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+    // Reset input so same file can be selected again
+    e.target.value = ''
+  }
+
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="flex-1 px-2 py-1 text-sm border border-black rounded-none focus:outline-none focus:ring-0"
+        />
+        <label className="px-3 py-1 text-sm bg-black text-white border border-black hover:bg-gray-800 cursor-pointer whitespace-nowrap">
+          파일 선택
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            className="hidden"
+          />
+        </label>
+      </div>
     </div>
   )
 }

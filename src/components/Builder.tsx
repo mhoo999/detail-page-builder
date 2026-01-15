@@ -167,6 +167,8 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
     setCurrentPageId(page.id)
     setShowPageList(false)
     selectComponent(null)
+    // 불러온 페이지에서도 수정 가능하도록 초기 마운트 플래그 해제
+    isInitialMountRef.current = false
   }
 
   const deletePage = (id: string) => {
@@ -211,12 +213,15 @@ export function Builder({ initialPage, onBack }: BuilderProps) {
       setPageTitle(initialPage.title)
       setCurrentPageId(initialPage.id)
       selectComponent(null)
-    }
-    // 초기 마운트 완료 표시
-    setTimeout(() => {
+      // 불러온 페이지에서도 수정 가능하도록 초기 마운트 플래그 해제
       isInitialMountRef.current = false
-    }, 100)
-  }, [initialPage, setComponents, selectComponent])
+    } else {
+      // 새 페이지인 경우 초기 마운트 완료 표시
+      setTimeout(() => {
+        isInitialMountRef.current = false
+      }, 100)
+    }
+  }, [initialPage])
 
   // 자동 저장: components 또는 pageTitle 변경 시 디바운스 적용
   useEffect(() => {
