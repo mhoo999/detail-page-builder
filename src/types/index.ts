@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -267,6 +267,32 @@ export interface CountdownComponent {
   }
 }
 
+// Review Carousel Component
+export interface ReviewComponent {
+  id: string
+  type: 'review'
+  data: {
+    backgroundColor: string
+    height?: string
+    showTitle: boolean
+    title: string
+    titleSize: string
+    titleWeight: '400' | '500' | '600' | '700'
+    titleColor: string
+    cardBgColor: string
+    cardTextColor: string
+    starColor: string
+    autoPlay: boolean
+    interval: number
+    items: {
+      id: string
+      rating: number
+      content: string
+      author: string
+    }[]
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -279,6 +305,7 @@ export type Component =
   | CTAComponent
   | BeforeAfterComponent
   | CountdownComponent
+  | ReviewComponent
 
 export interface ComponentTemplate {
   type: ComponentType

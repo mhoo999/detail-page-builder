@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -66,6 +66,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: '카운트다운',
     description: '세일 종료, 이벤트 마감 시간 표시',
     icon: '⏰',
+  },
+  {
+    type: 'review',
+    label: '리뷰/후기',
+    description: '고객 후기를 캐러셀 형태로 표시',
+    icon: '⭐',
   },
 ]
 
@@ -251,4 +257,24 @@ export const DEFAULT_COUNTDOWN: CountdownComponent['data'] = {
   labelSize: '14',
   labelColor: '#ffffff',
   expiredMessage: '이벤트가 종료되었습니다',
+}
+
+export const DEFAULT_REVIEW: ReviewComponent['data'] = {
+  backgroundColor: '#f9fafb',
+  height: 'auto',
+  showTitle: true,
+  title: '고객 후기',
+  titleSize: '28',
+  titleWeight: '700',
+  titleColor: '#000000',
+  cardBgColor: '#ffffff',
+  cardTextColor: '#333333',
+  starColor: '#fbbf24',
+  autoPlay: true,
+  interval: 5000,
+  items: [
+    { id: 'review1', rating: 5, content: '정말 만족합니다! 품질이 좋고 배송도 빨라요.', author: '김**' },
+    { id: 'review2', rating: 5, content: '재구매 의사 있습니다. 추천해요!', author: '이**' },
+    { id: 'review3', rating: 4, content: '가격 대비 좋은 것 같아요.', author: '박**' },
+  ],
 }

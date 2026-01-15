@@ -29,6 +29,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <BeforeAfterRenderer component={component} />
       case 'countdown':
         return <CountdownRenderer component={component} />
+      case 'review':
+        return <ReviewRenderer component={component} />
       default:
         return null
   }
@@ -1098,6 +1100,134 @@ function CountdownRenderer({ component }: { component: Extract<Component, { type
             <TimeBox value={timeLeft.seconds} label="초" />
           </div>
         )}
+      </div>
+    </div>
+  )
+}
+
+function ReviewRenderer({ component }: { component: Extract<Component, { type: 'review' }> }) {
+  const { data } = component
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  useEffect(() => {
+    if (data.autoPlay && data.items.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % data.items.length)
+      }, data.interval)
+      return () => clearInterval(timer)
+    }
+  }, [data.autoPlay, data.interval, data.items.length])
+
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span
+        key={i}
+        style={{
+          color: i < rating ? data.starColor : '#d1d5db',
+          fontSize: '20px',
+        }}
+      >
+        ★
+      </span>
+    ))
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        {data.showTitle && (
+          <h2
+            style={{
+              fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+              fontWeight: data.titleWeight,
+              color: data.titleColor,
+              marginBottom: '24px',
+              textAlign: 'center',
+            }}
+          >
+            {data.title}
+          </h2>
+        )}
+        <div style={{ position: 'relative', overflow: 'hidden' }}>
+          <div
+            style={{
+              display: 'flex',
+              transition: 'transform 0.5s ease',
+              transform: `translateX(-${currentIndex * 100}%)`,
+            }}
+          >
+            {data.items.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  minWidth: '100%',
+                  padding: '0 20px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: data.cardBgColor,
+                    color: data.cardTextColor,
+                    padding: '32px',
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <div style={{ marginBottom: '16px' }}>{renderStars(item.rating)}</div>
+                  <p
+                    style={{
+                      fontSize: '18px',
+                      lineHeight: '1.6',
+                      marginBottom: '16px',
+                      fontStyle: 'italic',
+                    }}
+                  >
+                    "{item.content}"
+                  </p>
+                  <p style={{ fontSize: '14px', color: '#666' }}>- {item.author}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {data.items.length > 1 && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '8px',
+                marginTop: '20px',
+              }}
+            >
+              {data.items.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setCurrentIndex(index)
+                  }}
+                  style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    backgroundColor: index === currentIndex ? data.starColor : '#d1d5db',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

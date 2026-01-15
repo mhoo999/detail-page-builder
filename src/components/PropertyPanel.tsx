@@ -68,6 +68,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'countdown' && (
         <CountdownProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'review' && (
+        <ReviewProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -1430,6 +1433,169 @@ function CountdownProperties({ component, updateData }: {
           value={data.labelColor}
           onChange={(v) => updateData('labelColor', v)}
         />
+      </Section>
+    </div>
+  )
+}
+
+function ReviewProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'review' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addItem = () => {
+    updateData('items', [
+      ...data.items,
+      { id: `review-${Date.now()}`, rating: 5, content: '새 후기를 입력하세요', author: '고객명' },
+    ])
+  }
+
+  const updateItem = (index: number, field: string, value: string | number) => {
+    const newItems = [...data.items]
+    newItems[index] = { ...newItems[index], [field]: value }
+    updateData('items', newItems)
+  }
+
+  const removeItem = (index: number) => {
+    if (data.items.length <= 1) {
+      alert('최소 1개의 후기가 필요합니다.')
+      return
+    }
+    updateData('items', data.items.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="타이틀">
+        <Toggle
+          label="타이틀 표시"
+          value={data.showTitle}
+          onChange={(v) => updateData('showTitle', v)}
+        />
+        {data.showTitle && (
+          <>
+            <TextInput
+              label="타이틀 텍스트"
+              value={data.title}
+              onChange={(v) => updateData('title', v)}
+            />
+            <TextInput
+              label="크기"
+              value={data.titleSize.replace('px', '')}
+              onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="28"
+            />
+            <Select
+              label="굵기"
+              value={data.titleWeight}
+              onChange={(v) => updateData('titleWeight', v)}
+              options={[
+                { value: '400', label: 'Regular' },
+                { value: '500', label: 'Medium' },
+                { value: '600', label: 'SemiBold' },
+                { value: '700', label: 'Bold' },
+              ]}
+            />
+            <ColorInput
+              label="색상"
+              value={data.titleColor}
+              onChange={(v) => updateData('titleColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="카드 스타일">
+        <ColorInput
+          label="카드 배경색"
+          value={data.cardBgColor}
+          onChange={(v) => updateData('cardBgColor', v)}
+        />
+        <ColorInput
+          label="카드 텍스트 색상"
+          value={data.cardTextColor}
+          onChange={(v) => updateData('cardTextColor', v)}
+        />
+        <ColorInput
+          label="별점 색상"
+          value={data.starColor}
+          onChange={(v) => updateData('starColor', v)}
+        />
+      </Section>
+
+      <Section title="자동 재생">
+        <Toggle
+          label="자동 재생"
+          value={data.autoPlay}
+          onChange={(v) => updateData('autoPlay', v)}
+        />
+        {data.autoPlay && (
+          <TextInput
+            label="간격 (ms)"
+            value={data.interval.toString()}
+            onChange={(v) => updateData('interval', parseInt(v) || 5000)}
+            placeholder="5000"
+          />
+        )}
+      </Section>
+
+      <Section title="후기 항목">
+        {data.items.map((item, index) => (
+          <div key={item.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">후기 {index + 1}</span>
+              <button
+                onClick={() => removeItem(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <Select
+              label="별점"
+              value={item.rating.toString()}
+              onChange={(v) => updateItem(index, 'rating', parseInt(v))}
+              options={[
+                { value: '1', label: '★☆☆☆☆' },
+                { value: '2', label: '★★☆☆☆' },
+                { value: '3', label: '★★★☆☆' },
+                { value: '4', label: '★★★★☆' },
+                { value: '5', label: '★★★★★' },
+              ]}
+            />
+            <TextArea
+              label="후기 내용"
+              value={item.content}
+              onChange={(v) => updateItem(index, 'content', v)}
+            />
+            <TextInput
+              label="작성자"
+              value={item.author}
+              onChange={(v) => updateItem(index, 'author', v)}
+            />
+          </div>
+        ))}
+        <button
+          onClick={addItem}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 후기 추가
+        </button>
       </Section>
     </div>
   )

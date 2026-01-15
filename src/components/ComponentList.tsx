@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN } from '../constants/componentTemplates'
-import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN, DEFAULT_REVIEW } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -96,6 +96,13 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
           type: 'countdown',
           data: { ...DEFAULT_COUNTDOWN },
         } as CountdownComponent
+        break
+      case 'review':
+        newComponent = {
+          id: `review-${Date.now()}`,
+          type: 'review',
+          data: { ...DEFAULT_REVIEW, items: DEFAULT_REVIEW.items.map(item => ({ ...item })) },
+        } as ReviewComponent
         break
       default:
         return
