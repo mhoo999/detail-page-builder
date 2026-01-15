@@ -120,16 +120,16 @@ function HeroProperties({ component, updateData }: {
         />
         {data.showTitle && (
           <>
-            <TextInput
+            <TextArea
               label="텍스트"
               value={data.title}
               onChange={(v) => updateData('title', v)}
             />
             <TextInput
-              label="크기 (px)"
-              value={data.titleSize}
-              onChange={(v) => updateData('titleSize', v)}
-              placeholder="48px"
+              label="크기"
+              value={data.titleSize.replace('px', '')}
+              onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="48"
             />
             <Select
               label="굵기"
@@ -166,10 +166,10 @@ function HeroProperties({ component, updateData }: {
               onChange={(v) => updateData('description', v)}
             />
             <TextInput
-              label="크기 (px)"
-              value={data.descriptionSize}
-              onChange={(v) => updateData('descriptionSize', v)}
-              placeholder="18px"
+              label="크기"
+              value={data.descriptionSize.replace('px', '')}
+              onChange={(v) => updateData('descriptionSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="18"
             />
             <Select
               label="굵기"
@@ -186,6 +186,23 @@ function HeroProperties({ component, updateData }: {
               label="색상"
               value={data.descriptionColor}
               onChange={(v) => updateData('descriptionColor', v)}
+            />
+            <Select
+              label="텍스트 정렬"
+              value={data.descriptionAlign}
+              onChange={(v) => updateData('descriptionAlign', v)}
+              options={[
+                { value: 'left', label: '왼쪽' },
+                { value: 'center', label: '가운데' },
+                { value: 'right', label: '오른쪽' },
+                { value: 'justify', label: '양쪽 정렬' },
+              ]}
+            />
+            <TextInput
+              label="자간"
+              value={data.descriptionLetterSpacing.replace('px', '')}
+              onChange={(v) => updateData('descriptionLetterSpacing', v.replace(/[^0-9.-]/g, ''))}
+              placeholder="0"
             />
           </>
         )}
@@ -223,10 +240,10 @@ function HeroProperties({ component, updateData }: {
               onChange={(v) => updateData('buttonText', v)}
             />
             <TextInput
-              label="크기 (px)"
-              value={data.buttonSize}
-              onChange={(v) => updateData('buttonSize', v)}
-              placeholder="16px"
+              label="크기"
+              value={data.buttonSize.replace('px', '')}
+              onChange={(v) => updateData('buttonSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="16"
             />
             <Select
               label="굵기"
@@ -890,13 +907,15 @@ function Toggle({ label, value, onChange }: {
       <label className="text-xs font-medium text-gray-600">{label}</label>
       <button
         onClick={() => onChange(!value)}
-        className={`relative inline-flex h-6 w-11 items-center border border-black ${
-          value ? 'bg-black' : 'bg-white'
+        className={`relative inline-flex h-6 w-11 items-center border border-black rounded-full ${
+          value ? 'bg-black' : 'bg-gray-200'
         }`}
       >
         <span
-          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-            value ? 'translate-x-6' : 'translate-x-1'
+          className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+            value 
+              ? 'translate-x-6 bg-white' 
+              : 'translate-x-1 bg-gray-500'
           }`}
         />
       </button>

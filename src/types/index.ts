@@ -41,6 +41,8 @@ export interface HeroComponent {
     descriptionSize: string
     descriptionWeight: '400' | '500' | '600' | '700'
     descriptionColor: string
+    descriptionAlign: 'left' | 'center' | 'right' | 'justify'
+    descriptionLetterSpacing: string
 
     // Description Image
     showDescriptionImage: boolean

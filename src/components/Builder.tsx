@@ -439,10 +439,10 @@ function generateHeroHTML(comp: Extract<Component, { type: 'hero' }>): string {
   <div style="max-width: 1140px; margin: 0 auto; padding: 40px 20px; height: ${data.height}; display: flex; flex-direction: column; align-items: ${alignMap[data.align]}; justify-content: ${justifyMap[data.justify]}; position: relative; z-index: 1;">
     <div style="width: 100%; text-align: ${data.align};">
       ${data.showSectionTitle ? `<div style="display: inline-block; background-color: ${data.sectionTitleBgColor}; color: ${data.sectionTitleColor}; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 16px;">${data.sectionTitle}</div>` : ''}
-      ${data.showTitle ? `<h1 style="font-size: ${data.titleSize}; font-weight: ${data.titleWeight}; color: ${data.titleColor}; margin-bottom: 16px;">${data.title}</h1>` : ''}
-      ${data.showDescription ? `<p style="font-size: ${data.descriptionSize}; font-weight: ${data.descriptionWeight}; color: ${data.descriptionColor}; margin-bottom: 24px; line-height: 1.6;">${data.description}</p>` : ''}
+      ${data.showTitle ? `<h1 style="font-size: ${data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`}; font-weight: ${data.titleWeight}; color: ${data.titleColor}; margin-bottom: 16px; white-space: pre-wrap;">${data.title}</h1>` : ''}
+      ${data.showDescription ? `<p style="font-size: ${data.descriptionSize.includes('px') ? data.descriptionSize : `${data.descriptionSize}px`}; font-weight: ${data.descriptionWeight}; color: ${data.descriptionColor}; margin-bottom: 24px; line-height: 1.6; white-space: pre-wrap; text-align: ${data.descriptionAlign}; letter-spacing: ${data.descriptionLetterSpacing.includes('px') ? data.descriptionLetterSpacing : `${data.descriptionLetterSpacing}px`};">${data.description}</p>` : ''}
       ${data.showDescriptionImage && data.descriptionImage ? `<div style="margin-bottom: 24px;"><img src="${data.descriptionImage}" alt="Description" style="max-width: 100%; height: auto; border-radius: 8px;"></div>` : ''}
-      ${data.showButton ? `<button style="background-color: ${data.buttonBgColor}; color: ${data.buttonColor}; font-size: ${data.buttonSize}; font-weight: ${data.buttonWeight}; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer;">${data.buttonText}</button>` : ''}
+      ${data.showButton ? `<button style="background-color: ${data.buttonBgColor}; color: ${data.buttonColor}; font-size: ${data.buttonSize.includes('px') ? data.buttonSize : `${data.buttonSize}px`}; font-weight: ${data.buttonWeight}; padding: 12px 32px; border-radius: 8px; border: none; cursor: pointer;">${data.buttonText}</button>` : ''}
     </div>
   </div>
 </div>`
@@ -514,7 +514,7 @@ function generateGridHTML(comp: Extract<Component, { type: 'grid' }>): string {
       <div style="width: ${data.iconSize}; height: ${data.iconSize}; margin-bottom: 16px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
         <img src="${item.image}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">
       </div>
-      <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">${item.title}</h3>
+      <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px; white-space: pre-wrap;">${item.title}</h3>
       <p style="font-size: 14px; color: #666;">${item.description}</p>
     </div>`).join('\n    ')}
   </div>

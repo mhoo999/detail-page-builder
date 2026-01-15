@@ -91,10 +91,11 @@ function HeroRenderer({ component }: { component: Extract<Component, { type: 'he
           {data.showTitle && (
             <h1
               style={{
-                fontSize: data.titleSize,
+                fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
                 fontWeight: data.titleWeight,
                 color: data.titleColor,
                 marginBottom: '16px',
+                whiteSpace: 'pre-wrap',
               }}
             >
               {data.title}
@@ -104,12 +105,14 @@ function HeroRenderer({ component }: { component: Extract<Component, { type: 'he
           {data.showDescription && (
             <p
               style={{
-                fontSize: data.descriptionSize,
+                fontSize: data.descriptionSize.includes('px') ? data.descriptionSize : `${data.descriptionSize}px`,
                 fontWeight: data.descriptionWeight,
                 color: data.descriptionColor,
                 marginBottom: '24px',
                 lineHeight: '1.6',
                 whiteSpace: 'pre-wrap',
+                textAlign: data.descriptionAlign,
+                letterSpacing: data.descriptionLetterSpacing.includes('px') ? data.descriptionLetterSpacing : `${data.descriptionLetterSpacing}px`,
               }}
             >
               {data.description}
@@ -131,7 +134,7 @@ function HeroRenderer({ component }: { component: Extract<Component, { type: 'he
               style={{
                 backgroundColor: data.buttonBgColor,
                 color: data.buttonColor,
-                fontSize: data.buttonSize,
+                fontSize: data.buttonSize.includes('px') ? data.buttonSize : `${data.buttonSize}px`,
                 fontWeight: data.buttonWeight,
                 padding: '12px 32px',
                 borderRadius: '8px',
@@ -451,7 +454,7 @@ function GridRenderer({ component }: { component: Extract<Component, { type: 'gr
                 }}
               />
             </div>
-            <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px', whiteSpace: 'pre-wrap' }}>
               {item.title}
             </h3>
             <p style={{ fontSize: '14px', color: '#666' }}>{item.description}</p>
