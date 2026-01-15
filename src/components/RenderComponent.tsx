@@ -15,10 +15,12 @@ export function RenderComponent({ component }: RenderComponentProps) {
       return <VideoRenderer component={component} />
     case 'divider':
       return <DividerRenderer component={component} />
-    case 'grid':
-      return <GridRenderer component={component} />
-    default:
-      return null
+      case 'grid':
+        return <GridRenderer component={component} />
+      case 'table':
+        return <TableRenderer component={component} />
+      default:
+        return null
   }
 }
 
@@ -107,6 +109,7 @@ function HeroRenderer({ component }: { component: Extract<Component, { type: 'he
                 color: data.descriptionColor,
                 marginBottom: '24px',
                 lineHeight: '1.6',
+                whiteSpace: 'pre-wrap',
               }}
             >
               {data.description}
@@ -399,6 +402,7 @@ function GridRenderer({ component }: { component: Extract<Component, { type: 'gr
         width: '100%',
         backgroundColor: data.backgroundColor,
         padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
       }}
       className="cursor-pointer"
     >
@@ -453,6 +457,73 @@ function GridRenderer({ component }: { component: Extract<Component, { type: 'gr
             <p style={{ fontSize: '14px', color: '#666' }}>{item.description}</p>
           </div>
         ))}
+      </div>
+    </div>
+  )
+}
+
+function TableRenderer({ component }: { component: Extract<Component, { type: 'table' }> }) {
+  const { data } = component
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto', overflowX: 'auto' }}>
+        <table
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            border: `${data.borderWidth} solid ${data.borderColor}`,
+          }}
+        >
+          <thead>
+            <tr>
+              {data.columns.map((column) => (
+                <th
+                  key={column.id}
+                  style={{
+                    backgroundColor: data.headerBackgroundColor,
+                    color: data.headerTextColor,
+                    padding: '12px',
+                    textAlign: 'left',
+                    border: `${data.borderWidth} solid ${data.borderColor}`,
+                    fontWeight: '600',
+                    ...(column.width && column.width !== 'auto' ? { width: column.width } : {}),
+                  }}
+                >
+                  {column.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.rows.map((row) => (
+              <tr key={row.id}>
+                {row.cells.map((cell, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    style={{
+                      backgroundColor: data.cellBackgroundColor,
+                      color: data.cellTextColor,
+                      padding: '12px',
+                      border: `${data.borderWidth} solid ${data.borderColor}`,
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )

@@ -394,6 +394,8 @@ function generateHTML(components: Component[], title: string): string {
         return generateDividerHTML(comp)
       case 'grid':
         return generateGridHTML(comp)
+      case 'table':
+        return generateTableHTML(comp)
       default:
         return ''
     }
@@ -505,7 +507,8 @@ function generateDividerHTML(comp: Extract<Component, { type: 'divider' }>): str
 
 function generateGridHTML(comp: Extract<Component, { type: 'grid' }>): string {
   const { data } = comp
-  return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px;">
+  const heightStyle = data.height && data.height !== 'auto' ? `min-height: ${data.height};` : ''
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px; ${heightStyle}">
   <div style="max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: repeat(${data.columns}, 1fr); gap: ${data.gap};">
     ${data.items.map(item => `<div style="background-color: ${data.itemBackgroundColor}; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center;">
       <div style="width: ${data.iconSize}; height: ${data.iconSize}; margin-bottom: 16px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
@@ -514,6 +517,40 @@ function generateGridHTML(comp: Extract<Component, { type: 'grid' }>): string {
       <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">${item.title}</h3>
       <p style="font-size: 14px; color: #666;">${item.description}</p>
     </div>`).join('\n    ')}
+  </div>
+</div>`
+}
+
+function generateTableHTML(comp: Extract<Component, { type: 'table' }>): string {
+  const { data } = comp
+  const heightStyle = data.height && data.height !== 'auto' ? `min-height: ${data.height};` : ''
+  
+  const headerCells = data.columns.map(col => {
+    const widthStyle = col.width && col.width !== 'auto' ? `width: ${col.width};` : ''
+    return `<th style="background-color: ${data.headerBackgroundColor}; color: ${data.headerTextColor}; padding: 12px; text-align: left; border: ${data.borderWidth} solid ${data.borderColor}; font-weight: 600; ${widthStyle}">${col.label}</th>`
+  }).join('\n      ')
+  
+  const rows = data.rows.map(row => {
+    const cells = row.cells.map((cell) => {
+      return `<td style="background-color: ${data.cellBackgroundColor}; color: ${data.cellTextColor}; padding: 12px; border: ${data.borderWidth} solid ${data.borderColor}; white-space: pre-wrap;">${cell}</td>`
+    }).join('\n        ')
+    return `<tr>
+        ${cells}
+      </tr>`
+  }).join('\n      ')
+  
+  return `<div style="width: 100%; background-color: ${data.backgroundColor}; padding: 40px 20px; ${heightStyle}">
+  <div style="max-width: 1140px; margin: 0 auto; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; border: ${data.borderWidth} solid ${data.borderColor};">
+      <thead>
+        <tr>
+      ${headerCells}
+        </tr>
+      </thead>
+      <tbody>
+      ${rows}
+      </tbody>
+    </table>
   </div>
 </div>`
 }

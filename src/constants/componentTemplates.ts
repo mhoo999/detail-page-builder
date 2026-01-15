@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -30,6 +30,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: '그리드/리스트',
     description: '상품 목록, 스펙 테이블 등',
     icon: '📋',
+  },
+  {
+    type: 'table',
+    label: '표',
+    description: '데이터를 표 형식으로 표시',
+    icon: '📊',
   },
 ]
 
@@ -100,9 +106,29 @@ export const DEFAULT_GRID: GridComponent['data'] = {
   columns: 3,
   gap: '20px',
   iconSize: '80px',
+  height: 'auto',
   items: [
     { id: '1', image: 'https://via.placeholder.com/80', title: '아이템 1', description: '설명 1' },
     { id: '2', image: 'https://via.placeholder.com/80', title: '아이템 2', description: '설명 2' },
     { id: '3', image: 'https://via.placeholder.com/80', title: '아이템 3', description: '설명 3' },
+  ],
+}
+
+export const DEFAULT_TABLE: TableComponent['data'] = {
+  backgroundColor: '#ffffff',
+  headerBackgroundColor: '#000000',
+  headerTextColor: '#ffffff',
+  cellBackgroundColor: '#ffffff',
+  cellTextColor: '#000000',
+  borderColor: '#e5e7eb',
+  borderWidth: '1px',
+  height: 'auto',
+  columns: [
+    { id: 'col1', label: '항목', width: '200px' },
+    { id: 'col2', label: '내용', width: 'auto' },
+  ],
+  rows: [
+    { id: 'row1', cells: ['항목 1', '내용 1'] },
+    { id: 'row2', cells: ['항목 2', '내용 2'] },
   ],
 }

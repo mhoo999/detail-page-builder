@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -115,11 +115,37 @@ export interface GridComponent {
     columns: number
     gap: string
     iconSize: string
+    height?: string
     items: {
       id: string
       image: string
       title: string
       description: string
+    }[]
+  }
+}
+
+// Table Component
+export interface TableComponent {
+  id: string
+  type: 'table'
+  data: {
+    backgroundColor: string
+    headerBackgroundColor: string
+    headerTextColor: string
+    cellBackgroundColor: string
+    cellTextColor: string
+    borderColor: string
+    borderWidth: string
+    height?: string
+    columns: {
+      id: string
+      label: string
+      width?: string
+    }[]
+    rows: {
+      id: string
+      cells: string[]
     }[]
   }
 }
@@ -130,6 +156,7 @@ export type Component =
   | VideoComponent
   | DividerComponent
   | GridComponent
+  | TableComponent
 
 export interface ComponentTemplate {
   type: ComponentType

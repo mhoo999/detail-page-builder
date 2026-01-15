@@ -46,6 +46,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'grid' && (
         <GridProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'table' && (
+        <TableProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -551,6 +554,12 @@ function GridProperties({ component, updateData }: {
           onChange={(v) => updateData('iconSize', v)}
           placeholder="80px"
         />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
       </Section>
 
       <Section title="아이템">
@@ -587,6 +596,186 @@ function GridProperties({ component, updateData }: {
           className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
         >
           + 아이템 추가
+        </button>
+      </Section>
+    </div>
+  )
+}
+
+function TableProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'table' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addColumn = () => {
+    updateData('columns', [
+      ...data.columns,
+      { id: `col-${Date.now()}`, label: '새 컬럼', width: 'auto' },
+    ])
+    // 새 컬럼을 추가할 때 모든 행에 빈 셀 추가
+    updateData('rows', data.rows.map(row => ({
+      ...row,
+      cells: [...row.cells, ''],
+    })))
+  }
+
+  const updateColumn = (index: number, field: string, value: string) => {
+    const newColumns = [...data.columns]
+    newColumns[index] = { ...newColumns[index], [field]: value }
+    updateData('columns', newColumns)
+  }
+
+  const removeColumn = (index: number) => {
+    if (data.columns.length <= 1) {
+      alert('최소 1개의 컬럼이 필요합니다.')
+      return
+    }
+    updateData('columns', data.columns.filter((_, i) => i !== index))
+    // 컬럼을 제거할 때 모든 행에서 해당 셀 제거
+    updateData('rows', data.rows.map(row => ({
+      ...row,
+      cells: row.cells.filter((_, i) => i !== index),
+    })))
+  }
+
+  const addRow = () => {
+    updateData('rows', [
+      ...data.rows,
+      { id: `row-${Date.now()}`, cells: new Array(data.columns.length).fill('') },
+    ])
+  }
+
+  const updateRowCell = (rowIndex: number, cellIndex: number, value: string) => {
+    const newRows = [...data.rows]
+    newRows[rowIndex] = {
+      ...newRows[rowIndex],
+      cells: newRows[rowIndex].cells.map((cell, i) => i === cellIndex ? value : cell),
+    }
+    updateData('rows', newRows)
+  }
+
+  const removeRow = (index: number) => {
+    if (data.rows.length <= 1) {
+      alert('최소 1개의 행이 필요합니다.')
+      return
+    }
+    updateData('rows', data.rows.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="섹션 배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <ColorInput
+          label="헤더 배경색"
+          value={data.headerBackgroundColor}
+          onChange={(v) => updateData('headerBackgroundColor', v)}
+        />
+        <ColorInput
+          label="헤더 텍스트 색상"
+          value={data.headerTextColor}
+          onChange={(v) => updateData('headerTextColor', v)}
+        />
+        <ColorInput
+          label="셀 배경색"
+          value={data.cellBackgroundColor}
+          onChange={(v) => updateData('cellBackgroundColor', v)}
+        />
+        <ColorInput
+          label="셀 텍스트 색상"
+          value={data.cellTextColor}
+          onChange={(v) => updateData('cellTextColor', v)}
+        />
+      </Section>
+
+      <Section title="테두리">
+        <ColorInput
+          label="테두리 색상"
+          value={data.borderColor}
+          onChange={(v) => updateData('borderColor', v)}
+        />
+        <TextInput
+          label="테두리 두께"
+          value={data.borderWidth}
+          onChange={(v) => updateData('borderWidth', v)}
+          placeholder="1px"
+        />
+      </Section>
+
+      <Section title="레이아웃">
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="컬럼">
+        {data.columns.map((column, index) => (
+          <div key={column.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">컬럼 {index + 1}</span>
+              <button
+                onClick={() => removeColumn(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <TextInput
+              label="라벨"
+              value={column.label}
+              onChange={(v) => updateColumn(index, 'label', v)}
+            />
+            <TextInput
+              label="너비"
+              value={column.width || 'auto'}
+              onChange={(v) => updateColumn(index, 'width', v)}
+              placeholder="auto"
+            />
+          </div>
+        ))}
+        <button
+          onClick={addColumn}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 컬럼 추가
+        </button>
+      </Section>
+
+      <Section title="행">
+        {data.rows.map((row, rowIndex) => (
+          <div key={row.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">행 {rowIndex + 1}</span>
+              <button
+                onClick={() => removeRow(rowIndex)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            {row.cells.map((cell, cellIndex) => (
+              <TextArea
+                key={cellIndex}
+                label={`셀 ${cellIndex + 1} (${data.columns[cellIndex]?.label || ''})`}
+                value={cell}
+                onChange={(v) => updateRowCell(rowIndex, cellIndex, v)}
+              />
+            ))}
+          </div>
+        ))}
+        <button
+          onClick={addRow}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 행 추가
         </button>
       </Section>
     </div>
