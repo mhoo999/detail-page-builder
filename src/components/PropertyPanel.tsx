@@ -47,7 +47,11 @@ export function PropertyPanel({
         <GridProperties component={selectedComponent} updateData={updateData} />
       )}
       {selectedComponent.type === 'table' && (
-        <TableProperties component={selectedComponent} updateData={updateData} />
+        <TableProperties 
+          component={selectedComponent} 
+          updateData={updateData}
+          onUpdateComponent={onUpdateComponent}
+        />
       )}
     </aside>
   )
@@ -619,22 +623,29 @@ function GridProperties({ component, updateData }: {
   )
 }
 
-function TableProperties({ component, updateData }: {
+function TableProperties({ component, updateData, onUpdateComponent }: {
   component: Extract<Component, { type: 'table' }>
   updateData: (key: string, value: any) => void
+  onUpdateComponent: (id: string, updates: Partial<Component>) => void
 }) {
   const { data } = component
 
   const addColumn = () => {
-    updateData('columns', [
-      ...data.columns,
-      { id: `col-${Date.now()}`, label: '새 컬럼', width: 'auto' },
-    ])
-    // 새 컬럼을 추가할 때 모든 행에 빈 셀 추가
-    updateData('rows', data.rows.map(row => ({
+    const newColumn = { id: `col-${Date.now()}`, label: '새 컬럼', width: 'auto' }
+    const newColumns = [...data.columns, newColumn]
+    const newRows = data.rows.map(row => ({
       ...row,
       cells: [...row.cells, ''],
-    })))
+    }))
+    // 컬럼과 행을 동시에 업데이트
+    onUpdateComponent(component.id, {
+      ...component,
+      data: {
+        ...data,
+        columns: newColumns,
+        rows: newRows,
+      },
+    } as any)
   }
 
   const updateColumn = (index: number, field: string, value: string) => {
