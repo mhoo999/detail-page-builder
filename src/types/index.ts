@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -201,6 +201,32 @@ export interface TabsComponent {
   }
 }
 
+// CTA Button Section Component
+export interface CTAComponent {
+  id: string
+  type: 'cta'
+  data: {
+    backgroundColor: string
+    height?: string
+    showTitle: boolean
+    title: string
+    titleSize: string
+    titleWeight: '400' | '500' | '600' | '700'
+    titleColor: string
+    showDescription: boolean
+    description: string
+    descriptionSize: string
+    descriptionColor: string
+    buttonText: string
+    buttonSize: string
+    buttonWeight: '400' | '500' | '600' | '700'
+    buttonColor: string
+    buttonBgColor: string
+    buttonBorderRadius: string
+    buttonWidth: string
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -210,6 +236,7 @@ export type Component =
   | TableComponent
   | FAQComponent
   | TabsComponent
+  | CTAComponent
 
 export interface ComponentTemplate {
   type: ComponentType

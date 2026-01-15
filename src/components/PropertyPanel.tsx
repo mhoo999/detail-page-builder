@@ -59,6 +59,9 @@ export function PropertyPanel({
       {selectedComponent.type === 'tabs' && (
         <TabsProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'cta' && (
+        <CTAProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -1091,6 +1094,145 @@ function TabsProperties({ component, updateData }: {
         >
           + 탭 추가
         </button>
+      </Section>
+    </div>
+  )
+}
+
+function CTAProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'cta' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  return (
+    <div className="space-y-4">
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="타이틀">
+        <Toggle
+          label="타이틀 표시"
+          value={data.showTitle}
+          onChange={(v) => updateData('showTitle', v)}
+        />
+        {data.showTitle && (
+          <>
+            <TextInput
+              label="타이틀 텍스트"
+              value={data.title}
+              onChange={(v) => updateData('title', v)}
+            />
+            <TextInput
+              label="크기"
+              value={data.titleSize.replace('px', '')}
+              onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="32"
+            />
+            <Select
+              label="굵기"
+              value={data.titleWeight}
+              onChange={(v) => updateData('titleWeight', v)}
+              options={[
+                { value: '400', label: 'Regular' },
+                { value: '500', label: 'Medium' },
+                { value: '600', label: 'SemiBold' },
+                { value: '700', label: 'Bold' },
+              ]}
+            />
+            <ColorInput
+              label="색상"
+              value={data.titleColor}
+              onChange={(v) => updateData('titleColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="설명">
+        <Toggle
+          label="설명 표시"
+          value={data.showDescription}
+          onChange={(v) => updateData('showDescription', v)}
+        />
+        {data.showDescription && (
+          <>
+            <TextInput
+              label="설명 텍스트"
+              value={data.description}
+              onChange={(v) => updateData('description', v)}
+            />
+            <TextInput
+              label="크기"
+              value={data.descriptionSize.replace('px', '')}
+              onChange={(v) => updateData('descriptionSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="16"
+            />
+            <ColorInput
+              label="색상"
+              value={data.descriptionColor}
+              onChange={(v) => updateData('descriptionColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="버튼">
+        <TextInput
+          label="버튼 텍스트"
+          value={data.buttonText}
+          onChange={(v) => updateData('buttonText', v)}
+        />
+        <TextInput
+          label="크기"
+          value={data.buttonSize.replace('px', '')}
+          onChange={(v) => updateData('buttonSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="18"
+        />
+        <Select
+          label="굵기"
+          value={data.buttonWeight}
+          onChange={(v) => updateData('buttonWeight', v)}
+          options={[
+            { value: '400', label: 'Regular' },
+            { value: '500', label: 'Medium' },
+            { value: '600', label: 'SemiBold' },
+            { value: '700', label: 'Bold' },
+          ]}
+        />
+        <ColorInput
+          label="텍스트 색상"
+          value={data.buttonColor}
+          onChange={(v) => updateData('buttonColor', v)}
+        />
+        <ColorInput
+          label="배경색"
+          value={data.buttonBgColor}
+          onChange={(v) => updateData('buttonBgColor', v)}
+        />
+        <TextInput
+          label="모서리 둥글기"
+          value={data.buttonBorderRadius}
+          onChange={(v) => updateData('buttonBorderRadius', v)}
+          placeholder="8px"
+        />
+        <TextInput
+          label="버튼 너비"
+          value={data.buttonWidth}
+          onChange={(v) => updateData('buttonWidth', v)}
+          placeholder="200px"
+        />
       </Section>
     </div>
   )

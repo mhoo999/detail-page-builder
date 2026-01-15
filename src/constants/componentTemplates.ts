@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent } from '../types'
+import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -48,6 +48,12 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     label: '탭',
     description: '여러 정보를 탭으로 구분하여 표시',
     icon: '📑',
+  },
+  {
+    type: 'cta',
+    label: 'CTA 버튼',
+    description: '구매하기, 문의하기 등 주요 액션 버튼',
+    icon: '🔘',
   },
 ]
 
@@ -182,4 +188,25 @@ export const DEFAULT_TABS: TabsComponent['data'] = {
     { id: 'tab2', label: '리뷰', content: '리뷰 내용을 입력하세요' },
     { id: 'tab3', label: '배송안내', content: '배송안내 내용을 입력하세요' },
   ],
+}
+
+export const DEFAULT_CTA: CTAComponent['data'] = {
+  backgroundColor: '#3b82f6',
+  height: 'auto',
+  showTitle: true,
+  title: '지금 바로 시작하세요',
+  titleSize: '32',
+  titleWeight: '700',
+  titleColor: '#ffffff',
+  showDescription: true,
+  description: '특별한 혜택과 함께 지금 구매하세요',
+  descriptionSize: '16',
+  descriptionColor: '#e0e7ff',
+  buttonText: '구매하기',
+  buttonSize: '18',
+  buttonWeight: '600',
+  buttonColor: '#3b82f6',
+  buttonBgColor: '#ffffff',
+  buttonBorderRadius: '8px',
+  buttonWidth: '200px',
 }

@@ -23,6 +23,8 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <FAQRenderer component={component} />
       case 'tabs':
         return <TabsRenderer component={component} />
+      case 'cta':
+        return <CTARenderer component={component} />
       default:
         return null
   }
@@ -725,6 +727,82 @@ function TabsRenderer({ component }: { component: Extract<Component, { type: 'ta
         >
           {activeItem?.content || ''}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function CTARenderer({ component }: { component: Extract<Component, { type: 'cta' }> }) {
+  const { data } = component
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '60px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div
+        style={{
+          maxWidth: '1140px',
+          margin: '0 auto',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        {data.showTitle && (
+          <h2
+            style={{
+              fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+              fontWeight: data.titleWeight,
+              color: data.titleColor,
+              marginBottom: '16px',
+            }}
+          >
+            {data.title}
+          </h2>
+        )}
+        {data.showDescription && (
+          <p
+            style={{
+              fontSize: data.descriptionSize.includes('px') ? data.descriptionSize : `${data.descriptionSize}px`,
+              color: data.descriptionColor,
+              marginBottom: '32px',
+              lineHeight: '1.6',
+            }}
+          >
+            {data.description}
+          </p>
+        )}
+        <button
+          style={{
+            backgroundColor: data.buttonBgColor,
+            color: data.buttonColor,
+            fontSize: data.buttonSize.includes('px') ? data.buttonSize : `${data.buttonSize}px`,
+            fontWeight: data.buttonWeight,
+            padding: '16px 32px',
+            borderRadius: data.buttonBorderRadius,
+            border: 'none',
+            cursor: 'pointer',
+            width: data.buttonWidth,
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)'
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)'
+            e.currentTarget.style.boxShadow = 'none'
+          }}
+        >
+          {data.buttonText}
+        </button>
       </div>
     </div>
   )

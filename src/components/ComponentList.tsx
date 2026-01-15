@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS } from '../constants/componentTemplates'
-import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -75,6 +75,13 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
             items: DEFAULT_TABS.items.map(item => ({ ...item }))
           },
         } as TabsComponent
+        break
+      case 'cta':
+        newComponent = {
+          id: `cta-${Date.now()}`,
+          type: 'cta',
+          data: { ...DEFAULT_CTA },
+        } as CTAComponent
         break
       default:
         return
