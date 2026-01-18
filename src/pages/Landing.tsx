@@ -129,33 +129,6 @@ export function Landing({ onStart, onLoadPage, onDeletePage }: LandingProps) {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-300 mt-12">
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="flex flex-wrap justify-center gap-4 mb-6">
-            <a
-              href="https://hoons-service-archive.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-black text-white border border-black hover:bg-gray-800"
-            >
-              다른 서비스 이용해보기
-            </a>
-            <a
-              href="https://hoons-service-archive.vercel.app/#coffee"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-black text-white border border-black hover:bg-gray-800"
-            >
-              개발자 커피 한잔 사주기
-            </a>
-          </div>
-          <div className="text-center text-gray-600 text-sm">
-            mhoo999@naver.com
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
