@@ -80,6 +80,18 @@ export function PropertyPanel({
       {selectedComponent.type === 'quote' && (
         <QuoteProperties component={selectedComponent} updateData={updateData} />
       )}
+      {selectedComponent.type === 'imageGallery' && (
+        <ImageGalleryProperties component={selectedComponent} updateData={updateData} />
+      )}
+      {selectedComponent.type === 'trustBadge' && (
+        <TrustBadgeProperties component={selectedComponent} updateData={updateData} />
+      )}
+      {selectedComponent.type === 'shipping' && (
+        <ShippingProperties component={selectedComponent} updateData={updateData} />
+      )}
+      {selectedComponent.type === 'noticeBanner' && (
+        <NoticeBannerProperties component={selectedComponent} updateData={updateData} />
+      )}
     </aside>
   )
 }
@@ -92,6 +104,7 @@ function HeroProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       {/* Background */}
       <Section title="배경">
         <ColorInput
@@ -356,6 +369,8 @@ function SliderProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
+
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -433,6 +448,8 @@ function VideoProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
+
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -494,6 +511,7 @@ function DividerProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -569,6 +587,8 @@ function GridProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
+
       <Section title="배경">
         <ColorInput
           label="섹션 배경색"
@@ -720,6 +740,7 @@ function TableProperties({ component, updateData, onUpdateComponent }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="섹션 배경색"
@@ -877,6 +898,7 @@ function FAQProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1027,6 +1049,7 @@ function TabsProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1125,6 +1148,7 @@ function CTAProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1264,6 +1288,7 @@ function BeforeAfterProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1341,6 +1366,7 @@ function CountdownProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1476,6 +1502,7 @@ function ReviewProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1639,6 +1666,7 @@ function IconListProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1781,6 +1809,7 @@ function StickyBarProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -1880,6 +1909,7 @@ function QuoteProperties({ component, updateData }: {
 
   return (
     <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
       <Section title="배경">
         <ColorInput
           label="배경색"
@@ -2142,12 +2172,852 @@ function Toggle({ label, value, onChange }: {
       >
         <span
           className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
-            value 
-              ? 'translate-x-6 bg-white' 
+            value
+              ? 'translate-x-6 bg-white'
               : 'translate-x-1 bg-gray-500'
           }`}
         />
       </button>
+    </div>
+  )
+}
+
+// Common Section Header Properties
+function SectionHeaderProperties({ data, updateData }: {
+  data: any
+  updateData: (key: string, value: any) => void
+}) {
+  return (
+    <Section title="섹션 헤더">
+      <Toggle
+        label="헤더 표시"
+        value={data.showHeader || false}
+        onChange={(v) => updateData('showHeader', v)}
+      />
+      {data.showHeader && (
+        <>
+          <Select
+            label="정렬"
+            value={data.headerAlign || 'center'}
+            onChange={(v) => updateData('headerAlign', v)}
+            options={[
+              { value: 'left', label: '왼쪽' },
+              { value: 'center', label: '가운데' },
+              { value: 'right', label: '오른쪽' },
+            ]}
+          />
+
+          {/* 위 서브타이틀 */}
+          <div className="border-t border-gray-200 pt-3 mt-3">
+            <Toggle
+              label="위 서브타이틀"
+              value={data.showTopSubtitle || false}
+              onChange={(v) => updateData('showTopSubtitle', v)}
+            />
+            {data.showTopSubtitle && (
+              <>
+                <TextInput
+                  label="텍스트"
+                  value={data.topSubtitle || ''}
+                  onChange={(v) => updateData('topSubtitle', v)}
+                />
+                <TextInput
+                  label="크기"
+                  value={(data.topSubtitleSize || '14').replace('px', '')}
+                  onChange={(v) => updateData('topSubtitleSize', v.replace(/[^0-9.]/g, ''))}
+                  placeholder="14"
+                />
+                <Select
+                  label="굵기"
+                  value={data.topSubtitleWeight || '500'}
+                  onChange={(v) => updateData('topSubtitleWeight', v)}
+                  options={[
+                    { value: '400', label: 'Regular' },
+                    { value: '500', label: 'Medium' },
+                    { value: '600', label: 'SemiBold' },
+                    { value: '700', label: 'Bold' },
+                  ]}
+                />
+                <ColorInput
+                  label="색상"
+                  value={data.topSubtitleColor || '#3b82f6'}
+                  onChange={(v) => updateData('topSubtitleColor', v)}
+                />
+              </>
+            )}
+          </div>
+
+          {/* 타이틀 */}
+          <div className="border-t border-gray-200 pt-3 mt-3">
+            <Toggle
+              label="타이틀"
+              value={data.showHeaderTitle || false}
+              onChange={(v) => updateData('showHeaderTitle', v)}
+            />
+            {data.showHeaderTitle && (
+              <>
+                <TextInput
+                  label="텍스트"
+                  value={data.headerTitle || ''}
+                  onChange={(v) => updateData('headerTitle', v)}
+                />
+                <TextInput
+                  label="크기"
+                  value={(data.headerTitleSize || '32').replace('px', '')}
+                  onChange={(v) => updateData('headerTitleSize', v.replace(/[^0-9.]/g, ''))}
+                  placeholder="32"
+                />
+                <Select
+                  label="굵기"
+                  value={data.headerTitleWeight || '700'}
+                  onChange={(v) => updateData('headerTitleWeight', v)}
+                  options={[
+                    { value: '400', label: 'Regular' },
+                    { value: '500', label: 'Medium' },
+                    { value: '600', label: 'SemiBold' },
+                    { value: '700', label: 'Bold' },
+                  ]}
+                />
+                <ColorInput
+                  label="색상"
+                  value={data.headerTitleColor || '#000000'}
+                  onChange={(v) => updateData('headerTitleColor', v)}
+                />
+              </>
+            )}
+          </div>
+
+          {/* 아래 서브타이틀 */}
+          <div className="border-t border-gray-200 pt-3 mt-3">
+            <Toggle
+              label="아래 서브타이틀"
+              value={data.showBottomSubtitle || false}
+              onChange={(v) => updateData('showBottomSubtitle', v)}
+            />
+            {data.showBottomSubtitle && (
+              <>
+                <TextInput
+                  label="텍스트"
+                  value={data.bottomSubtitle || ''}
+                  onChange={(v) => updateData('bottomSubtitle', v)}
+                />
+                <TextInput
+                  label="크기"
+                  value={(data.bottomSubtitleSize || '14').replace('px', '')}
+                  onChange={(v) => updateData('bottomSubtitleSize', v.replace(/[^0-9.]/g, ''))}
+                  placeholder="14"
+                />
+                <Select
+                  label="굵기"
+                  value={data.bottomSubtitleWeight || '500'}
+                  onChange={(v) => updateData('bottomSubtitleWeight', v)}
+                  options={[
+                    { value: '400', label: 'Regular' },
+                    { value: '500', label: 'Medium' },
+                    { value: '600', label: 'SemiBold' },
+                    { value: '700', label: 'Bold' },
+                  ]}
+                />
+                <ColorInput
+                  label="색상"
+                  value={data.bottomSubtitleColor || '#666666'}
+                  onChange={(v) => updateData('bottomSubtitleColor', v)}
+                />
+              </>
+            )}
+          </div>
+
+          {/* 설명 */}
+          <div className="border-t border-gray-200 pt-3 mt-3">
+            <Toggle
+              label="설명"
+              value={data.showHeaderDescription || false}
+              onChange={(v) => updateData('showHeaderDescription', v)}
+            />
+            {data.showHeaderDescription && (
+              <>
+                <TextArea
+                  label="텍스트"
+                  value={data.headerDescription || ''}
+                  onChange={(v: string) => updateData('headerDescription', v)}
+                />
+                <TextInput
+                  label="크기"
+                  value={(data.headerDescriptionSize || '16').replace('px', '')}
+                  onChange={(v) => updateData('headerDescriptionSize', v.replace(/[^0-9.]/g, ''))}
+                  placeholder="16"
+                />
+                <Select
+                  label="굵기"
+                  value={data.headerDescriptionWeight || '400'}
+                  onChange={(v) => updateData('headerDescriptionWeight', v)}
+                  options={[
+                    { value: '400', label: 'Regular' },
+                    { value: '500', label: 'Medium' },
+                    { value: '600', label: 'SemiBold' },
+                    { value: '700', label: 'Bold' },
+                  ]}
+                />
+                <ColorInput
+                  label="색상"
+                  value={data.headerDescriptionColor || '#666666'}
+                  onChange={(v) => updateData('headerDescriptionColor', v)}
+                />
+              </>
+            )}
+          </div>
+        </>
+      )}
+    </Section>
+  )
+}
+
+function ImageGalleryProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'imageGallery' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addImage = () => {
+    updateData('images', [
+      ...data.images,
+      { id: `img-${Date.now()}`, url: 'https://via.placeholder.com/600x600', alt: '새 이미지' },
+    ])
+  }
+
+  const updateImage = (index: number, field: string, value: string) => {
+    const newImages = [...data.images]
+    newImages[index] = { ...newImages[index], [field]: value }
+    updateData('images', newImages)
+  }
+
+  const removeImage = (index: number) => {
+    if (data.images.length <= 1) {
+      alert('최소 1개의 이미지가 필요합니다.')
+      return
+    }
+    updateData('images', data.images.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
+
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="메인 이미지">
+        <TextInput
+          label="이미지 높이"
+          value={data.mainImageHeight}
+          onChange={(v) => updateData('mainImageHeight', v)}
+          placeholder="500px"
+        />
+        <Toggle
+          label="줌 기능"
+          value={data.enableZoom}
+          onChange={(v) => updateData('enableZoom', v)}
+        />
+        {data.enableZoom && (
+          <TextInput
+            label="줌 배율"
+            value={data.zoomScale.toString()}
+            onChange={(v) => updateData('zoomScale', parseFloat(v) || 2)}
+            placeholder="2"
+          />
+        )}
+      </Section>
+
+      <Section title="썸네일">
+        <Toggle
+          label="썸네일 표시"
+          value={data.showThumbnails}
+          onChange={(v) => updateData('showThumbnails', v)}
+        />
+        {data.showThumbnails && (
+          <>
+            <Select
+              label="썸네일 위치"
+              value={data.thumbnailPosition}
+              onChange={(v) => updateData('thumbnailPosition', v)}
+              options={[
+                { value: 'bottom', label: '하단' },
+                { value: 'left', label: '왼쪽' },
+              ]}
+            />
+            <TextInput
+              label="썸네일 크기"
+              value={data.thumbnailSize}
+              onChange={(v) => updateData('thumbnailSize', v)}
+              placeholder="80px"
+            />
+            <TextInput
+              label="썸네일 간격"
+              value={data.thumbnailGap}
+              onChange={(v) => updateData('thumbnailGap', v)}
+              placeholder="8px"
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="이미지 목록">
+        {data.images.map((image, index) => (
+          <div key={image.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">이미지 {index + 1}</span>
+              <button
+                onClick={() => removeImage(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <ImageInput
+              label="이미지 URL"
+              value={image.url}
+              onChange={(v) => updateImage(index, 'url', v)}
+              placeholder="https://... 또는 파일 선택"
+            />
+            <TextInput
+              label="대체 텍스트"
+              value={image.alt}
+              onChange={(v) => updateImage(index, 'alt', v)}
+            />
+          </div>
+        ))}
+        <button
+          onClick={addImage}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 이미지 추가
+        </button>
+      </Section>
+    </div>
+  )
+}
+
+function TrustBadgeProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'trustBadge' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addBadge = () => {
+    updateData('badges', [
+      ...data.badges,
+      { id: `badge-${Date.now()}`, icon: '✓', text: '새 배지', subtext: '설명' },
+    ])
+  }
+
+  const updateBadge = (index: number, field: string, value: string) => {
+    const newBadges = [...data.badges]
+    newBadges[index] = { ...newBadges[index], [field]: value }
+    updateData('badges', newBadges)
+  }
+
+  const removeBadge = (index: number) => {
+    if (data.badges.length <= 1) {
+      alert('최소 1개의 배지가 필요합니다.')
+      return
+    }
+    updateData('badges', data.badges.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="타이틀">
+        <Toggle
+          label="타이틀 표시"
+          value={data.showTitle}
+          onChange={(v) => updateData('showTitle', v)}
+        />
+        {data.showTitle && (
+          <>
+            <TextInput
+              label="타이틀"
+              value={data.title}
+              onChange={(v) => updateData('title', v)}
+            />
+            <TextInput
+              label="크기"
+              value={data.titleSize.replace('px', '')}
+              onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="20"
+            />
+            <Select
+              label="굵기"
+              value={data.titleWeight}
+              onChange={(v) => updateData('titleWeight', v)}
+              options={[
+                { value: '400', label: 'Regular' },
+                { value: '500', label: 'Medium' },
+                { value: '600', label: 'SemiBold' },
+                { value: '700', label: 'Bold' },
+              ]}
+            />
+            <ColorInput
+              label="색상"
+              value={data.titleColor}
+              onChange={(v) => updateData('titleColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="레이아웃">
+        <Select
+          label="배치 방향"
+          value={data.layout}
+          onChange={(v) => updateData('layout', v)}
+          options={[
+            { value: 'horizontal', label: '가로' },
+            { value: 'vertical', label: '세로' },
+          ]}
+        />
+        <TextInput
+          label="간격"
+          value={data.gap}
+          onChange={(v) => updateData('gap', v)}
+          placeholder="24px"
+        />
+      </Section>
+
+      <Section title="배지 스타일">
+        <TextInput
+          label="아이콘 크기"
+          value={data.iconSize.replace('px', '')}
+          onChange={(v) => updateData('iconSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="32"
+        />
+        <ColorInput
+          label="텍스트 색상"
+          value={data.textColor}
+          onChange={(v) => updateData('textColor', v)}
+        />
+        <TextInput
+          label="텍스트 크기"
+          value={data.textSize.replace('px', '')}
+          onChange={(v) => updateData('textSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="14"
+        />
+        <ColorInput
+          label="서브텍스트 색상"
+          value={data.subtextColor}
+          onChange={(v) => updateData('subtextColor', v)}
+        />
+        <TextInput
+          label="서브텍스트 크기"
+          value={data.subtextSize.replace('px', '')}
+          onChange={(v) => updateData('subtextSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="12"
+        />
+        <ColorInput
+          label="배지 배경색"
+          value={data.badgeBgColor}
+          onChange={(v) => updateData('badgeBgColor', v)}
+        />
+        <ColorInput
+          label="배지 테두리 색상"
+          value={data.badgeBorderColor}
+          onChange={(v) => updateData('badgeBorderColor', v)}
+        />
+        <TextInput
+          label="모서리 둥글기"
+          value={data.badgeBorderRadius}
+          onChange={(v) => updateData('badgeBorderRadius', v)}
+          placeholder="8px"
+        />
+      </Section>
+
+      <Section title="배지 목록">
+        {data.badges.map((badge, index) => (
+          <div key={badge.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">배지 {index + 1}</span>
+              <button
+                onClick={() => removeBadge(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <TextInput
+              label="아이콘"
+              value={badge.icon}
+              onChange={(v) => updateBadge(index, 'icon', v)}
+            />
+            <TextInput
+              label="텍스트"
+              value={badge.text}
+              onChange={(v) => updateBadge(index, 'text', v)}
+            />
+            <TextInput
+              label="서브텍스트"
+              value={badge.subtext}
+              onChange={(v) => updateBadge(index, 'subtext', v)}
+            />
+          </div>
+        ))}
+        <button
+          onClick={addBadge}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 배지 추가
+        </button>
+      </Section>
+    </div>
+  )
+}
+
+function ShippingProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'shipping' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  const addItem = () => {
+    updateData('items', [
+      ...data.items,
+      { id: `ship-${Date.now()}`, label: '새 항목', value: '내용' },
+    ])
+  }
+
+  const updateItem = (index: number, field: string, value: string) => {
+    const newItems = [...data.items]
+    newItems[index] = { ...newItems[index], [field]: value }
+    updateData('items', newItems)
+  }
+
+  const removeItem = (index: number) => {
+    if (data.items.length <= 1) {
+      alert('최소 1개의 항목이 필요합니다.')
+      return
+    }
+    updateData('items', data.items.filter((_, i) => i !== index))
+  }
+
+  return (
+    <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+      </Section>
+
+      <Section title="타이틀">
+        <TextInput
+          label="타이틀"
+          value={data.title}
+          onChange={(v) => updateData('title', v)}
+        />
+        <TextInput
+          label="크기"
+          value={data.titleSize.replace('px', '')}
+          onChange={(v) => updateData('titleSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="18"
+        />
+        <Select
+          label="굵기"
+          value={data.titleWeight}
+          onChange={(v) => updateData('titleWeight', v)}
+          options={[
+            { value: '400', label: 'Regular' },
+            { value: '500', label: 'Medium' },
+            { value: '600', label: 'SemiBold' },
+            { value: '700', label: 'Bold' },
+          ]}
+        />
+        <ColorInput
+          label="색상"
+          value={data.titleColor}
+          onChange={(v) => updateData('titleColor', v)}
+        />
+      </Section>
+
+      <Section title="아이콘">
+        <Toggle
+          label="아이콘 표시"
+          value={data.showIcon}
+          onChange={(v) => updateData('showIcon', v)}
+        />
+        {data.showIcon && (
+          <>
+            <Select
+              label="아이콘 타입"
+              value={data.iconType}
+              onChange={(v) => updateData('iconType', v)}
+              options={[
+                { value: 'truck', label: '🚚 트럭' },
+                { value: 'box', label: '📦 박스' },
+                { value: 'clock', label: '⏰ 시계' },
+              ]}
+            />
+            <TextInput
+              label="아이콘 크기"
+              value={data.iconSize.replace('px', '')}
+              onChange={(v) => updateData('iconSize', v.replace(/[^0-9.]/g, ''))}
+              placeholder="24"
+            />
+            <ColorInput
+              label="아이콘 색상"
+              value={data.iconColor}
+              onChange={(v) => updateData('iconColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="텍스트 스타일">
+        <TextInput
+          label="텍스트 크기"
+          value={data.textSize.replace('px', '')}
+          onChange={(v) => updateData('textSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="14"
+        />
+        <ColorInput
+          label="라벨 색상"
+          value={data.labelColor}
+          onChange={(v) => updateData('labelColor', v)}
+        />
+        <ColorInput
+          label="값 색상"
+          value={data.valueColor}
+          onChange={(v) => updateData('valueColor', v)}
+        />
+      </Section>
+
+      <Section title="테두리">
+        <Select
+          label="테두리 스타일"
+          value={data.borderStyle}
+          onChange={(v) => updateData('borderStyle', v)}
+          options={[
+            { value: 'none', label: '없음' },
+            { value: 'solid', label: '실선' },
+            { value: 'dashed', label: '대시' },
+          ]}
+        />
+        {data.borderStyle !== 'none' && (
+          <ColorInput
+            label="테두리 색상"
+            value={data.borderColor}
+            onChange={(v) => updateData('borderColor', v)}
+          />
+        )}
+        <TextInput
+          label="모서리 둥글기"
+          value={data.borderRadius}
+          onChange={(v) => updateData('borderRadius', v)}
+          placeholder="8px"
+        />
+      </Section>
+
+      <Section title="배송 정보 항목">
+        {data.items.map((item, index) => (
+          <div key={item.id} className="p-3 border border-black mb-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium">항목 {index + 1}</span>
+              <button
+                onClick={() => removeItem(index)}
+                className="px-2 py-1 text-xs bg-white text-black border border-black hover:bg-gray-100"
+              >
+                삭제
+              </button>
+            </div>
+            <TextInput
+              label="라벨"
+              value={item.label}
+              onChange={(v) => updateItem(index, 'label', v)}
+            />
+            <TextInput
+              label="값"
+              value={item.value}
+              onChange={(v) => updateItem(index, 'value', v)}
+            />
+          </div>
+        ))}
+        <button
+          onClick={addItem}
+          className="w-full px-3 py-2 text-sm bg-black text-white border border-black hover:bg-gray-800"
+        >
+          + 항목 추가
+        </button>
+      </Section>
+    </div>
+  )
+}
+
+function NoticeBannerProperties({ component, updateData }: {
+  component: Extract<Component, { type: 'noticeBanner' }>
+  updateData: (key: string, value: any) => void
+}) {
+  const { data } = component
+
+  return (
+    <div className="space-y-4">
+      <SectionHeaderProperties data={data} updateData={updateData} />
+      <Section title="배경">
+        <ColorInput
+          label="배경색"
+          value={data.backgroundColor}
+          onChange={(v) => updateData('backgroundColor', v)}
+        />
+        <TextInput
+          label="높이"
+          value={data.height || 'auto'}
+          onChange={(v) => updateData('height', v)}
+          placeholder="auto"
+        />
+        <TextInput
+          label="모서리 둥글기"
+          value={data.borderRadius}
+          onChange={(v) => updateData('borderRadius', v)}
+          placeholder="8px"
+        />
+      </Section>
+
+      <Section title="스타일">
+        <Select
+          label="배너 스타일"
+          value={data.style}
+          onChange={(v) => updateData('style', v)}
+          options={[
+            { value: 'promotion', label: '프로모션' },
+            { value: 'info', label: '정보' },
+            { value: 'warning', label: '경고' },
+            { value: 'success', label: '성공' },
+          ]}
+        />
+      </Section>
+
+      <Section title="아이콘">
+        <Toggle
+          label="아이콘 표시"
+          value={data.showIcon}
+          onChange={(v) => updateData('showIcon', v)}
+        />
+        {data.showIcon && (
+          <>
+            <TextInput
+              label="아이콘"
+              value={data.icon}
+              onChange={(v) => updateData('icon', v)}
+            />
+            <ColorInput
+              label="아이콘 색상"
+              value={data.iconColor}
+              onChange={(v) => updateData('iconColor', v)}
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="텍스트">
+        <TextInput
+          label="메시지"
+          value={data.text}
+          onChange={(v) => updateData('text', v)}
+        />
+        <TextInput
+          label="크기"
+          value={data.textSize.replace('px', '')}
+          onChange={(v) => updateData('textSize', v.replace(/[^0-9.]/g, ''))}
+          placeholder="16"
+        />
+        <Select
+          label="굵기"
+          value={data.textWeight}
+          onChange={(v) => updateData('textWeight', v)}
+          options={[
+            { value: '400', label: 'Regular' },
+            { value: '500', label: 'Medium' },
+            { value: '600', label: 'SemiBold' },
+            { value: '700', label: 'Bold' },
+          ]}
+        />
+        <ColorInput
+          label="텍스트 색상"
+          value={data.textColor}
+          onChange={(v) => updateData('textColor', v)}
+        />
+      </Section>
+
+      <Section title="버튼">
+        <Toggle
+          label="버튼 표시"
+          value={data.showButton}
+          onChange={(v) => updateData('showButton', v)}
+        />
+        {data.showButton && (
+          <>
+            <TextInput
+              label="버튼 텍스트"
+              value={data.buttonText}
+              onChange={(v) => updateData('buttonText', v)}
+            />
+            <ColorInput
+              label="버튼 텍스트 색상"
+              value={data.buttonColor}
+              onChange={(v) => updateData('buttonColor', v)}
+            />
+            <ColorInput
+              label="버튼 배경색"
+              value={data.buttonBgColor}
+              onChange={(v) => updateData('buttonBgColor', v)}
+            />
+            <TextInput
+              label="버튼 모서리 둥글기"
+              value={data.buttonBorderRadius}
+              onChange={(v) => updateData('buttonBorderRadius', v)}
+              placeholder="4px"
+            />
+          </>
+        )}
+      </Section>
+
+      <Section title="닫기">
+        <Toggle
+          label="닫기 버튼 표시"
+          value={data.closable}
+          onChange={(v) => updateData('closable', v)}
+        />
+      </Section>
     </div>
   )
 }

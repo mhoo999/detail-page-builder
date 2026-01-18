@@ -1,5 +1,5 @@
 // Component Types
-export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review' | 'iconList' | 'stickyBar' | 'quote'
+export type ComponentType = 'hero' | 'slider' | 'video' | 'divider' | 'grid' | 'table' | 'faq' | 'tabs' | 'cta' | 'beforeAfter' | 'countdown' | 'review' | 'iconList' | 'stickyBar' | 'quote' | 'imageGallery' | 'trustBadge' | 'shipping' | 'noticeBanner'
 
 // Base styles shared across all components
 export interface BaseStyles {
@@ -10,6 +10,58 @@ export interface BaseStyles {
   backgroundColor?: string
   backgroundImage?: string
   [key: string]: string | undefined
+}
+
+// Common Section Header (shared across all components)
+export interface SectionHeader {
+  showHeader: boolean
+  headerAlign: 'left' | 'center' | 'right'
+  topSubtitle: string
+  showTopSubtitle: boolean
+  topSubtitleSize: string
+  topSubtitleWeight: '400' | '500' | '600' | '700'
+  topSubtitleColor: string
+  headerTitle: string
+  showHeaderTitle: boolean
+  headerTitleSize: string
+  headerTitleWeight: '400' | '500' | '600' | '700'
+  headerTitleColor: string
+  bottomSubtitle: string
+  showBottomSubtitle: boolean
+  bottomSubtitleSize: string
+  bottomSubtitleWeight: '400' | '500' | '600' | '700'
+  bottomSubtitleColor: string
+  headerDescription: string
+  showHeaderDescription: boolean
+  headerDescriptionSize: string
+  headerDescriptionWeight: '400' | '500' | '600' | '700'
+  headerDescriptionColor: string
+}
+
+// Default Section Header values
+export const DEFAULT_SECTION_HEADER: SectionHeader = {
+  showHeader: false,
+  headerAlign: 'center',
+  topSubtitle: '',
+  showTopSubtitle: false,
+  topSubtitleSize: '14',
+  topSubtitleWeight: '500',
+  topSubtitleColor: '#3b82f6',
+  headerTitle: '',
+  showHeaderTitle: false,
+  headerTitleSize: '32',
+  headerTitleWeight: '700',
+  headerTitleColor: '#000000',
+  bottomSubtitle: '',
+  showBottomSubtitle: false,
+  bottomSubtitleSize: '14',
+  bottomSubtitleWeight: '500',
+  bottomSubtitleColor: '#666666',
+  headerDescription: '',
+  showHeaderDescription: false,
+  headerDescriptionSize: '16',
+  headerDescriptionWeight: '400',
+  headerDescriptionColor: '#666666',
 }
 
 // Hero/Text Section Component
@@ -361,6 +413,114 @@ export interface QuoteComponent {
   }
 }
 
+// Image Gallery Component with Zoom
+export interface ImageGalleryComponent {
+  id: string
+  type: 'imageGallery'
+  data: {
+    backgroundColor: string
+    height?: string
+    images: {
+      id: string
+      url: string
+      alt: string
+    }[]
+    thumbnailSize: string
+    thumbnailGap: string
+    mainImageHeight: string
+    showThumbnails: boolean
+    thumbnailPosition: 'bottom' | 'left'
+    enableZoom: boolean
+    zoomScale: number
+  }
+}
+
+// Trust Badge Component
+export interface TrustBadgeComponent {
+  id: string
+  type: 'trustBadge'
+  data: {
+    backgroundColor: string
+    height?: string
+    layout: 'horizontal' | 'vertical'
+    gap: string
+    showTitle: boolean
+    title: string
+    titleSize: string
+    titleWeight: '400' | '500' | '600' | '700'
+    titleColor: string
+    badges: {
+      id: string
+      icon: string
+      text: string
+      subtext: string
+    }[]
+    iconSize: string
+    iconColor: string
+    textColor: string
+    textSize: string
+    subtextColor: string
+    subtextSize: string
+    badgeBgColor: string
+    badgeBorderColor: string
+    badgeBorderRadius: string
+  }
+}
+
+// Shipping Info Component
+export interface ShippingComponent {
+  id: string
+  type: 'shipping'
+  data: {
+    backgroundColor: string
+    height?: string
+    showIcon: boolean
+    iconType: 'truck' | 'box' | 'clock'
+    iconColor: string
+    iconSize: string
+    title: string
+    titleSize: string
+    titleWeight: '400' | '500' | '600' | '700'
+    titleColor: string
+    items: {
+      id: string
+      label: string
+      value: string
+    }[]
+    labelColor: string
+    valueColor: string
+    textSize: string
+    borderColor: string
+    borderStyle: 'none' | 'solid' | 'dashed'
+    borderRadius: string
+  }
+}
+
+// Notice Banner Component
+export interface NoticeBannerComponent {
+  id: string
+  type: 'noticeBanner'
+  data: {
+    backgroundColor: string
+    height?: string
+    style: 'info' | 'warning' | 'success' | 'promotion'
+    showIcon: boolean
+    icon: string
+    iconColor: string
+    text: string
+    textSize: string
+    textWeight: '400' | '500' | '600' | '700'
+    textColor: string
+    showButton: boolean
+    buttonText: string
+    buttonColor: string
+    buttonBgColor: string
+    buttonBorderRadius: string
+    closable: boolean
+    borderRadius: string
+  }
+}
+
 export type Component =
   | HeroComponent
   | SliderComponent
@@ -377,6 +537,10 @@ export type Component =
   | IconListComponent
   | StickyBarComponent
   | QuoteComponent
+  | ImageGalleryComponent
+  | TrustBadgeComponent
+  | ShippingComponent
+  | NoticeBannerComponent
 
 export interface ComponentTemplate {
   type: ComponentType

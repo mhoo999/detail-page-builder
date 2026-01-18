@@ -12,7 +12,8 @@
       "Bash(timeout:*)",
       "Bash(ping:*)",
       "Bash(npm run build:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "WebSearch"
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { ComponentTemplate, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent, QuoteComponent } from '../types'
+import { ComponentTemplate, DEFAULT_SECTION_HEADER } from '../types'
 
 export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
   {
@@ -91,10 +91,35 @@ export const COMPONENT_TEMPLATES: ComponentTemplate[] = [
     description: '중요 문구를 강조하여 표시',
     icon: '💬',
   },
+  {
+    type: 'imageGallery',
+    label: '이미지 갤러리',
+    description: '썸네일과 줌 기능이 있는 이미지 갤러리',
+    icon: '🔍',
+  },
+  {
+    type: 'trustBadge',
+    label: '신뢰 배지',
+    description: '보안 인증, 결제 안전 등 신뢰 요소 표시',
+    icon: '🛡️',
+  },
+  {
+    type: 'shipping',
+    label: '배송 정보',
+    description: '배송비, 예상 도착일 등 배송 안내',
+    icon: '🚚',
+  },
+  {
+    type: 'noticeBanner',
+    label: '공지 배너',
+    description: '프로모션, 할인 정보 등 알림 배너',
+    icon: '📢',
+  },
 ]
 
 // Default values for each component type
-export const DEFAULT_HERO: HeroComponent['data'] = {
+export const DEFAULT_HERO = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   showOverlayImage: false,
   overlayImage: '',
@@ -127,7 +152,8 @@ export const DEFAULT_HERO: HeroComponent['data'] = {
   justify: 'center',
 }
 
-export const DEFAULT_SLIDER: SliderComponent['data'] = {
+export const DEFAULT_SLIDER = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#f3f4f6',
   images: ['https://via.placeholder.com/1200x600/3b82f6/ffffff?text=Slide+1'],
   imageWidth: '1140px',
@@ -137,7 +163,8 @@ export const DEFAULT_SLIDER: SliderComponent['data'] = {
   showIndicators: true,
 }
 
-export const DEFAULT_VIDEO: VideoComponent['data'] = {
+export const DEFAULT_VIDEO = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#000000',
   videoType: 'youtube',
   videoUrl: '',
@@ -147,7 +174,8 @@ export const DEFAULT_VIDEO: VideoComponent['data'] = {
   loop: false,
 }
 
-export const DEFAULT_DIVIDER: DividerComponent['data'] = {
+export const DEFAULT_DIVIDER = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: 'transparent',
   height: '40px',
   showLine: true,
@@ -156,7 +184,8 @@ export const DEFAULT_DIVIDER: DividerComponent['data'] = {
   lineWidth: '1px',
 }
 
-export const DEFAULT_GRID: GridComponent['data'] = {
+export const DEFAULT_GRID = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   itemBackgroundColor: '#ffffff',
   columns: 3,
@@ -170,7 +199,8 @@ export const DEFAULT_GRID: GridComponent['data'] = {
   ],
 }
 
-export const DEFAULT_TABLE: TableComponent['data'] = {
+export const DEFAULT_TABLE = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   headerBackgroundColor: '#000000',
   headerTextColor: '#ffffff',
@@ -189,7 +219,8 @@ export const DEFAULT_TABLE: TableComponent['data'] = {
   ],
 }
 
-export const DEFAULT_FAQ: FAQComponent['data'] = {
+export const DEFAULT_FAQ = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   height: 'auto',
   titleText: '자주 묻는 질문',
@@ -209,7 +240,8 @@ export const DEFAULT_FAQ: FAQComponent['data'] = {
   ],
 }
 
-export const DEFAULT_TABS: TabsComponent['data'] = {
+export const DEFAULT_TABS = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   height: 'auto',
   tabBgColor: '#f3f4f6',
@@ -226,7 +258,8 @@ export const DEFAULT_TABS: TabsComponent['data'] = {
   ],
 }
 
-export const DEFAULT_CTA: CTAComponent['data'] = {
+export const DEFAULT_CTA = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#3b82f6',
   height: 'auto',
   showTitle: true,
@@ -247,7 +280,8 @@ export const DEFAULT_CTA: CTAComponent['data'] = {
   buttonWidth: '200px',
 }
 
-export const DEFAULT_BEFORE_AFTER: BeforeAfterComponent['data'] = {
+export const DEFAULT_BEFORE_AFTER = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   height: 'auto',
   beforeImage: 'https://via.placeholder.com/600x400/ef4444/ffffff?text=Before',
@@ -260,7 +294,8 @@ export const DEFAULT_BEFORE_AFTER: BeforeAfterComponent['data'] = {
   imageHeight: '400px',
 }
 
-export const DEFAULT_COUNTDOWN: CountdownComponent['data'] = {
+export const DEFAULT_COUNTDOWN = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ef4444',
   height: 'auto',
   targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
@@ -277,7 +312,8 @@ export const DEFAULT_COUNTDOWN: CountdownComponent['data'] = {
   expiredMessage: '이벤트가 종료되었습니다',
 }
 
-export const DEFAULT_REVIEW: ReviewComponent['data'] = {
+export const DEFAULT_REVIEW = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#f9fafb',
   height: 'auto',
   showTitle: true,
@@ -297,7 +333,8 @@ export const DEFAULT_REVIEW: ReviewComponent['data'] = {
   ],
 }
 
-export const DEFAULT_ICON_LIST: IconListComponent['data'] = {
+export const DEFAULT_ICON_LIST = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   height: 'auto',
   showTitle: true,
@@ -319,7 +356,8 @@ export const DEFAULT_ICON_LIST: IconListComponent['data'] = {
   ],
 }
 
-export const DEFAULT_STICKY_BAR: StickyBarComponent['data'] = {
+export const DEFAULT_STICKY_BAR = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#ffffff',
   height: '70px',
   showPrice: true,
@@ -335,7 +373,8 @@ export const DEFAULT_STICKY_BAR: StickyBarComponent['data'] = {
   buttonBorderRadius: '8px',
 }
 
-export const DEFAULT_QUOTE: QuoteComponent['data'] = {
+export const DEFAULT_QUOTE = {
+  ...DEFAULT_SECTION_HEADER,
   backgroundColor: '#f9fafb',
   height: 'auto',
   style: 'quote',
@@ -349,4 +388,96 @@ export const DEFAULT_QUOTE: QuoteComponent['data'] = {
   borderColor: '#3b82f6',
   borderWidth: '4px',
   iconColor: '#3b82f6',
+}
+
+export const DEFAULT_IMAGE_GALLERY = {
+  ...DEFAULT_SECTION_HEADER,
+  backgroundColor: '#ffffff',
+  height: 'auto',
+  images: [
+    { id: 'img1', url: 'https://via.placeholder.com/600x600/3b82f6/ffffff?text=Image+1', alt: '이미지 1' },
+    { id: 'img2', url: 'https://via.placeholder.com/600x600/22c55e/ffffff?text=Image+2', alt: '이미지 2' },
+    { id: 'img3', url: 'https://via.placeholder.com/600x600/ef4444/ffffff?text=Image+3', alt: '이미지 3' },
+  ],
+  thumbnailSize: '80px',
+  thumbnailGap: '8px',
+  mainImageHeight: '500px',
+  showThumbnails: true,
+  thumbnailPosition: 'bottom',
+  enableZoom: true,
+  zoomScale: 2,
+}
+
+export const DEFAULT_TRUST_BADGE = {
+  ...DEFAULT_SECTION_HEADER,
+  backgroundColor: '#f9fafb',
+  height: 'auto',
+  layout: 'horizontal',
+  gap: '24px',
+  showTitle: false,
+  title: '안심 쇼핑',
+  titleSize: '20',
+  titleWeight: '600',
+  titleColor: '#000000',
+  badges: [
+    { id: 'badge1', icon: '🔒', text: '안전결제', subtext: 'SSL 보안 적용' },
+    { id: 'badge2', icon: '✓', text: '정품보증', subtext: '100% 정품만 취급' },
+    { id: 'badge3', icon: '🔄', text: '교환/반품', subtext: '30일 이내 무료' },
+    { id: 'badge4', icon: '📞', text: '고객센터', subtext: '24시간 상담 가능' },
+  ],
+  iconSize: '32',
+  iconColor: '#3b82f6',
+  textColor: '#000000',
+  textSize: '14',
+  subtextColor: '#666666',
+  subtextSize: '12',
+  badgeBgColor: '#ffffff',
+  badgeBorderColor: '#e5e7eb',
+  badgeBorderRadius: '8px',
+}
+
+export const DEFAULT_SHIPPING = {
+  ...DEFAULT_SECTION_HEADER,
+  backgroundColor: '#ffffff',
+  height: 'auto',
+  showIcon: true,
+  iconType: 'truck',
+  iconColor: '#3b82f6',
+  iconSize: '24',
+  title: '배송 안내',
+  titleSize: '18',
+  titleWeight: '600',
+  titleColor: '#000000',
+  items: [
+    { id: 'ship1', label: '배송비', value: '무료배송' },
+    { id: 'ship2', label: '배송 예정일', value: '오늘 출발 시 내일 도착' },
+    { id: 'ship3', label: '배송 방법', value: 'CJ대한통운' },
+  ],
+  labelColor: '#666666',
+  valueColor: '#000000',
+  textSize: '14',
+  borderColor: '#e5e7eb',
+  borderStyle: 'solid',
+  borderRadius: '8px',
+}
+
+export const DEFAULT_NOTICE_BANNER = {
+  ...DEFAULT_SECTION_HEADER,
+  backgroundColor: '#fef3c7',
+  height: 'auto',
+  style: 'promotion',
+  showIcon: true,
+  icon: '🎉',
+  iconColor: '#f59e0b',
+  text: '지금 구매하시면 10% 추가 할인!',
+  textSize: '16',
+  textWeight: '600',
+  textColor: '#92400e',
+  showButton: true,
+  buttonText: '쿠폰 받기',
+  buttonColor: '#ffffff',
+  buttonBgColor: '#f59e0b',
+  buttonBorderRadius: '4px',
+  closable: false,
+  borderRadius: '8px',
 }

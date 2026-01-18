@@ -1,8 +1,80 @@
 import React, { useState, useEffect } from 'react'
-import { Component } from '../types'
+import { Component, SectionHeader } from '../types'
 
 interface RenderComponentProps {
   component: Component
+}
+
+// Common Section Header Renderer
+function SectionHeaderRenderer({ data }: { data: Partial<SectionHeader> }) {
+  if (!data.showHeader) return null
+
+  const alignMap = { left: 'flex-start', center: 'center', right: 'flex-end' }
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: alignMap[data.headerAlign || 'center'],
+        textAlign: data.headerAlign || 'center',
+        marginBottom: '24px',
+        width: '100%',
+      }}
+    >
+      {data.showTopSubtitle && data.topSubtitle && (
+        <span
+          style={{
+            fontSize: data.topSubtitleSize?.includes('px') ? data.topSubtitleSize : `${data.topSubtitleSize}px`,
+            fontWeight: data.topSubtitleWeight || '500',
+            color: data.topSubtitleColor || '#3b82f6',
+            marginBottom: '8px',
+          }}
+        >
+          {data.topSubtitle}
+        </span>
+      )}
+      {data.showHeaderTitle && data.headerTitle && (
+        <h2
+          style={{
+            fontSize: data.headerTitleSize?.includes('px') ? data.headerTitleSize : `${data.headerTitleSize}px`,
+            fontWeight: data.headerTitleWeight || '700',
+            color: data.headerTitleColor || '#000000',
+            margin: '0 0 8px 0',
+            lineHeight: '1.3',
+          }}
+        >
+          {data.headerTitle}
+        </h2>
+      )}
+      {data.showBottomSubtitle && data.bottomSubtitle && (
+        <span
+          style={{
+            fontSize: data.bottomSubtitleSize?.includes('px') ? data.bottomSubtitleSize : `${data.bottomSubtitleSize}px`,
+            fontWeight: data.bottomSubtitleWeight || '500',
+            color: data.bottomSubtitleColor || '#666666',
+            marginBottom: '8px',
+          }}
+        >
+          {data.bottomSubtitle}
+        </span>
+      )}
+      {data.showHeaderDescription && data.headerDescription && (
+        <p
+          style={{
+            fontSize: data.headerDescriptionSize?.includes('px') ? data.headerDescriptionSize : `${data.headerDescriptionSize}px`,
+            fontWeight: data.headerDescriptionWeight || '400',
+            color: data.headerDescriptionColor || '#666666',
+            margin: 0,
+            lineHeight: '1.6',
+            whiteSpace: 'pre-wrap',
+          }}
+        >
+          {data.headerDescription}
+        </p>
+      )}
+    </div>
+  )
 }
 
 export function RenderComponent({ component }: RenderComponentProps) {
@@ -37,6 +109,14 @@ export function RenderComponent({ component }: RenderComponentProps) {
         return <StickyBarRenderer component={component} />
       case 'quote':
         return <QuoteRenderer component={component} />
+      case 'imageGallery':
+        return <ImageGalleryRenderer component={component} />
+      case 'trustBadge':
+        return <TrustBadgeRenderer component={component} />
+      case 'shipping':
+        return <ShippingRenderer component={component} />
+      case 'noticeBanner':
+        return <NoticeBannerRenderer component={component} />
       default:
         return null
   }
@@ -58,6 +138,9 @@ function HeroRenderer({ component }: { component: Extract<Component, { type: 'he
       }}
       className="cursor-pointer"
     >
+      <div style={{ maxWidth: '1140px', margin: '0 auto', padding: '20px 20px 0' }}>
+        <SectionHeaderRenderer data={data as any} />
+      </div>
       {data.showOverlayImage && data.overlayImage && (
         <div
           style={{
@@ -200,18 +283,18 @@ function SliderRenderer({ component }: { component: Extract<Component, { type: '
       }}
       className="cursor-pointer"
     >
-      <div
-        style={{
-          maxWidth: data.imageWidth,
-          margin: '0 auto',
-          height: data.height,
-          position: 'relative',
-          overflow: 'hidden',
-          borderRadius: '8px',
-        }}
-      >
-        {data.images.map((image, index) => (
-          <img
+      <div style={{ maxWidth: data.imageWidth, margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+        <div
+          style={{
+            height: data.height,
+            position: 'relative',
+            overflow: 'hidden',
+            borderRadius: '8px',
+          }}
+        >
+          {data.images.map((image, index) => (
+            <img
             key={index}
             src={image}
             alt={`Slide ${index + 1}`}
@@ -310,6 +393,7 @@ function SliderRenderer({ component }: { component: Extract<Component, { type: '
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   )
@@ -338,8 +422,10 @@ function VideoRenderer({ component }: { component: Extract<Component, { type: 'v
       }}
       className="cursor-pointer"
     >
-      <div style={{ maxWidth: '1140px', margin: '0 auto', height: data.height }}>
-        {!data.videoUrl ? (
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+        <div style={{ height: data.height }}>
+          {!data.videoUrl ? (
           <div
             style={{
               width: '100%',
@@ -393,6 +479,7 @@ function VideoRenderer({ component }: { component: Extract<Component, { type: 'v
             <source src={data.videoUrl} />
           </video>
         )}
+        </div>
       </div>
     </div>
   )
@@ -406,13 +493,17 @@ function DividerRenderer({ component }: { component: Extract<Component, { type: 
       style={{
         width: '100%',
         backgroundColor: data.backgroundColor,
-        height: data.height,
+        minHeight: data.height,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
       }}
       className="cursor-pointer"
     >
+      <div style={{ maxWidth: '1140px', width: '100%', padding: '20px 20px 0' }}>
+        <SectionHeaderRenderer data={data as any} />
+      </div>
       {data.showLine && (
         <div style={{ maxWidth: '1140px', width: '100%', padding: '0 20px' }}>
           <div
@@ -442,15 +533,15 @@ function GridRenderer({ component }: { component: Extract<Component, { type: 'gr
       }}
       className="cursor-pointer"
     >
-      <div
-        style={{
-          maxWidth: '1140px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: `repeat(${data.columns}, 1fr)`,
-          gap: data.gap,
-        }}
-      >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${data.columns}, 1fr)`,
+            gap: data.gap,
+          }}
+        >
         {data.items.map((item) => (
           <div
             key={item.id}
@@ -493,6 +584,7 @@ function GridRenderer({ component }: { component: Extract<Component, { type: 'gr
             <p style={{ fontSize: '14px', color: '#666' }}>{item.description}</p>
           </div>
         ))}
+        </div>
       </div>
     </div>
   )
@@ -511,6 +603,9 @@ function TableRenderer({ component }: { component: Extract<Component, { type: 't
       }}
       className="cursor-pointer"
     >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+      </div>
       <div style={{ maxWidth: '1140px', margin: '0 auto', overflowX: 'auto' }}>
         <table
           style={{
@@ -596,6 +691,7 @@ function FAQRenderer({ component }: { component: Extract<Component, { type: 'faq
       className="cursor-pointer"
     >
       <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
         {data.showTitle && (
           <h2
             style={{
@@ -694,6 +790,7 @@ function TabsRenderer({ component }: { component: Extract<Component, { type: 'ta
       className="cursor-pointer"
     >
       <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
         <div
           style={{
             display: 'flex',
@@ -767,6 +864,7 @@ function CTARenderer({ component }: { component: Extract<Component, { type: 'cta
           alignItems: 'center',
         }}
       >
+        <SectionHeaderRenderer data={data as any} />
         {data.showTitle && (
           <h2
             style={{
@@ -862,6 +960,7 @@ function BeforeAfterRenderer({ component }: { component: Extract<Component, { ty
       className="cursor-pointer"
     >
       <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
         <div
           ref={containerRef}
           style={{
@@ -1069,6 +1168,7 @@ function CountdownRenderer({ component }: { component: Extract<Component, { type
           textAlign: 'center',
         }}
       >
+        <SectionHeaderRenderer data={data as any} />
         {data.showTitle && !isExpired && (
           <h2
             style={{
@@ -1149,6 +1249,7 @@ function ReviewRenderer({ component }: { component: Extract<Component, { type: '
       className="cursor-pointer"
     >
       <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
         {data.showTitle && (
           <h2
             style={{
@@ -1253,6 +1354,7 @@ function IconListRenderer({ component }: { component: Extract<Component, { type:
       className="cursor-pointer"
     >
       <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
         {data.showTitle && (
           <h2
             style={{
@@ -1414,6 +1516,7 @@ function QuoteRenderer({ component }: { component: Extract<Component, { type: 'q
       className="cursor-pointer"
     >
       <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
         <div style={getQuoteStyle()}>
           {data.style === 'callout' && (
             <div
@@ -1466,6 +1569,437 @@ function QuoteRenderer({ component }: { component: Extract<Component, { type: 'q
               {data.author}
             </p>
           )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ImageGalleryRenderer({ component }: { component: Extract<Component, { type: 'imageGallery' }> }) {
+  const { data } = component
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [isZoomed, setIsZoomed] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    if (data.images.length > 0 && selectedIndex >= data.images.length) {
+      setSelectedIndex(data.images.length - 1)
+    }
+  }, [data.images.length, selectedIndex])
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!data.enableZoom) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    setMousePosition({ x, y })
+  }
+
+  const selectedImage = data.images[selectedIndex]
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '40px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: data.thumbnailPosition === 'left' ? 'row' : 'column',
+            gap: '16px',
+          }}
+        >
+        {data.showThumbnails && data.thumbnailPosition === 'left' && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: data.thumbnailGap,
+            }}
+          >
+            {data.images.map((image, index) => (
+              <div
+                key={image.id}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setSelectedIndex(index)
+                }}
+                style={{
+                  width: data.thumbnailSize,
+                  height: data.thumbnailSize,
+                  borderRadius: '4px',
+                  overflow: 'hidden',
+                  border: index === selectedIndex ? '2px solid #3b82f6' : '2px solid transparent',
+                  cursor: 'pointer',
+                  opacity: index === selectedIndex ? 1 : 0.7,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <img
+                  src={image.url}
+                  alt={image.alt}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div
+          style={{
+            flex: 1,
+            height: data.mainImageHeight,
+            borderRadius: '8px',
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+          onMouseEnter={() => data.enableZoom && setIsZoomed(true)}
+          onMouseLeave={() => setIsZoomed(false)}
+          onMouseMove={handleMouseMove}
+        >
+          {selectedImage && (
+            <img
+              src={selectedImage.url}
+              alt={selectedImage.alt}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                transition: 'transform 0.1s ease',
+                transform: isZoomed ? `scale(${data.zoomScale})` : 'scale(1)',
+                transformOrigin: `${mousePosition.x}% ${mousePosition.y}%`,
+              }}
+            />
+          )}
+          {data.enableZoom && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '12px',
+                right: '12px',
+                backgroundColor: 'rgba(0,0,0,0.6)',
+                color: 'white',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '12px',
+              }}
+            >
+              🔍 마우스를 올려 확대
+            </div>
+          )}
+        </div>
+
+        {data.showThumbnails && data.thumbnailPosition === 'bottom' && (
+          <div
+            style={{
+              display: 'flex',
+              gap: data.thumbnailGap,
+              justifyContent: 'center',
+            }}
+          >
+            {data.images.map((image, index) => (
+              <div
+                key={image.id}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setSelectedIndex(index)
+                }}
+                style={{
+                  width: data.thumbnailSize,
+                  height: data.thumbnailSize,
+                  borderRadius: '4px',
+                  overflow: 'hidden',
+                  border: index === selectedIndex ? '2px solid #3b82f6' : '2px solid transparent',
+                  cursor: 'pointer',
+                  opacity: index === selectedIndex ? 1 : 0.7,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <img
+                  src={image.url}
+                  alt={image.alt}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TrustBadgeRenderer({ component }: { component: Extract<Component, { type: 'trustBadge' }> }) {
+  const { data } = component
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '24px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+        {data.showTitle && (
+          <h3
+            style={{
+              fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+              fontWeight: data.titleWeight,
+              color: data.titleColor,
+              textAlign: 'center',
+              marginBottom: '20px',
+            }}
+          >
+            {data.title}
+          </h3>
+        )}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: data.layout === 'horizontal' ? 'row' : 'column',
+            flexWrap: 'wrap',
+            gap: data.gap,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {data.badges.map((badge) => (
+            <div
+              key={badge.id}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '16px 20px',
+                backgroundColor: data.badgeBgColor,
+                border: `1px solid ${data.badgeBorderColor}`,
+                borderRadius: data.badgeBorderRadius,
+                minWidth: '120px',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: data.iconSize.includes('px') ? data.iconSize : `${data.iconSize}px`,
+                  marginBottom: '8px',
+                }}
+              >
+                {badge.icon}
+              </span>
+              <span
+                style={{
+                  fontSize: data.textSize.includes('px') ? data.textSize : `${data.textSize}px`,
+                  fontWeight: '600',
+                  color: data.textColor,
+                  marginBottom: '4px',
+                }}
+              >
+                {badge.text}
+              </span>
+              <span
+                style={{
+                  fontSize: data.subtextSize.includes('px') ? data.subtextSize : `${data.subtextSize}px`,
+                  color: data.subtextColor,
+                }}
+              >
+                {badge.subtext}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ShippingRenderer({ component }: { component: Extract<Component, { type: 'shipping' }> }) {
+  const { data } = component
+
+  const getIcon = () => {
+    switch (data.iconType) {
+      case 'truck':
+        return '🚚'
+      case 'box':
+        return '📦'
+      case 'clock':
+        return '⏰'
+      default:
+        return '🚚'
+    }
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor,
+        padding: '24px 20px',
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+        <div
+          style={{
+            border: data.borderStyle !== 'none' ? `1px ${data.borderStyle} ${data.borderColor}` : 'none',
+            borderRadius: data.borderRadius,
+            padding: '20px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              marginBottom: '16px',
+            }}
+          >
+            {data.showIcon && (
+              <span
+                style={{
+                  fontSize: data.iconSize.includes('px') ? data.iconSize : `${data.iconSize}px`,
+                }}
+              >
+                {getIcon()}
+              </span>
+            )}
+            <span
+              style={{
+                fontSize: data.titleSize.includes('px') ? data.titleSize : `${data.titleSize}px`,
+                fontWeight: data.titleWeight,
+                color: data.titleColor,
+              }}
+            >
+              {data.title}
+            </span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {data.items.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: data.textSize.includes('px') ? data.textSize : `${data.textSize}px`,
+                }}
+              >
+                <span style={{ color: data.labelColor }}>{item.label}</span>
+                <span style={{ color: data.valueColor, fontWeight: '500' }}>{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function NoticeBannerRenderer({ component }: { component: Extract<Component, { type: 'noticeBanner' }> }) {
+  const { data } = component
+  const [isVisible, setIsVisible] = useState(true)
+
+  if (!isVisible) return null
+
+  const getStyleColors = () => {
+    switch (data.style) {
+      case 'info':
+        return { bg: '#dbeafe', text: '#1e40af', icon: 'ℹ️' }
+      case 'warning':
+        return { bg: '#fef3c7', text: '#92400e', icon: '⚠️' }
+      case 'success':
+        return { bg: '#dcfce7', text: '#166534', icon: '✅' }
+      case 'promotion':
+        return { bg: '#fef3c7', text: '#92400e', icon: '🎉' }
+      default:
+        return { bg: data.backgroundColor, text: data.textColor, icon: data.icon }
+    }
+  }
+
+  const styleColors = getStyleColors()
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: data.backgroundColor || styleColors.bg,
+        padding: '16px 20px',
+        borderRadius: data.borderRadius,
+        ...(data.height && data.height !== 'auto' ? { minHeight: data.height } : {}),
+      }}
+      className="cursor-pointer"
+    >
+      <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
+        <SectionHeaderRenderer data={data as any} />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          gap: '16px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+          {data.showIcon && (
+            <span style={{ fontSize: '20px' }}>{data.icon || styleColors.icon}</span>
+          )}
+          <span
+            style={{
+              fontSize: data.textSize.includes('px') ? data.textSize : `${data.textSize}px`,
+              fontWeight: data.textWeight,
+              color: data.textColor || styleColors.text,
+            }}
+          >
+            {data.text}
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {data.showButton && (
+            <button
+              style={{
+                backgroundColor: data.buttonBgColor,
+                color: data.buttonColor,
+                padding: '8px 16px',
+                borderRadius: data.buttonBorderRadius,
+                border: 'none',
+                cursor: 'pointer',
+                fontWeight: '500',
+                fontSize: '14px',
+              }}
+            >
+              {data.buttonText}
+            </button>
+          )}
+          {data.closable && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsVisible(false)
+              }}
+              style={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '20px',
+                padding: '4px',
+                opacity: 0.6,
+              }}
+            >
+              ✕
+            </button>
+          )}
+        </div>
         </div>
       </div>
     </div>

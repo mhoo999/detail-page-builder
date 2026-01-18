@@ -1,5 +1,5 @@
-import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN, DEFAULT_REVIEW, DEFAULT_ICON_LIST, DEFAULT_STICKY_BAR, DEFAULT_QUOTE } from '../constants/componentTemplates'
-import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent, QuoteComponent } from '../types'
+import { COMPONENT_TEMPLATES, DEFAULT_HERO, DEFAULT_SLIDER, DEFAULT_VIDEO, DEFAULT_DIVIDER, DEFAULT_GRID, DEFAULT_TABLE, DEFAULT_FAQ, DEFAULT_TABS, DEFAULT_CTA, DEFAULT_BEFORE_AFTER, DEFAULT_COUNTDOWN, DEFAULT_REVIEW, DEFAULT_ICON_LIST, DEFAULT_STICKY_BAR, DEFAULT_QUOTE, DEFAULT_IMAGE_GALLERY, DEFAULT_TRUST_BADGE, DEFAULT_SHIPPING, DEFAULT_NOTICE_BANNER } from '../constants/componentTemplates'
+import { Component, HeroComponent, SliderComponent, VideoComponent, DividerComponent, GridComponent, TableComponent, FAQComponent, TabsComponent, CTAComponent, BeforeAfterComponent, CountdownComponent, ReviewComponent, IconListComponent, StickyBarComponent, QuoteComponent, ImageGalleryComponent, TrustBadgeComponent, ShippingComponent, NoticeBannerComponent } from '../types'
 
 interface ComponentListProps {
   onAddComponent: (component: Component) => void
@@ -124,6 +124,34 @@ export function ComponentList({ onAddComponent }: ComponentListProps) {
           type: 'quote',
           data: { ...DEFAULT_QUOTE },
         } as QuoteComponent
+        break
+      case 'imageGallery':
+        newComponent = {
+          id: `imageGallery-${Date.now()}`,
+          type: 'imageGallery',
+          data: { ...DEFAULT_IMAGE_GALLERY, images: DEFAULT_IMAGE_GALLERY.images.map(img => ({ ...img })) },
+        } as ImageGalleryComponent
+        break
+      case 'trustBadge':
+        newComponent = {
+          id: `trustBadge-${Date.now()}`,
+          type: 'trustBadge',
+          data: { ...DEFAULT_TRUST_BADGE, badges: DEFAULT_TRUST_BADGE.badges.map(badge => ({ ...badge })) },
+        } as TrustBadgeComponent
+        break
+      case 'shipping':
+        newComponent = {
+          id: `shipping-${Date.now()}`,
+          type: 'shipping',
+          data: { ...DEFAULT_SHIPPING, items: DEFAULT_SHIPPING.items.map(item => ({ ...item })) },
+        } as ShippingComponent
+        break
+      case 'noticeBanner':
+        newComponent = {
+          id: `noticeBanner-${Date.now()}`,
+          type: 'noticeBanner',
+          data: { ...DEFAULT_NOTICE_BANNER },
+        } as NoticeBannerComponent
         break
       default:
         return
